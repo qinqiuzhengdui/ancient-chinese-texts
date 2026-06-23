@@ -123,6 +123,33 @@ npm run dev
 
 ---
 
+## 常见问题 / 故障排查 (Troubleshooting)
+
+### ❌ 问题：启动后端时报 `ImportError: cannot import name '_QUERY_OPTIONS' from 'pymongo.cursor'`
+
+**原因**：这是一个依赖版本冲突的经典问题。当使用 `pip install -r requirements.txt` 时，`beanie` 若被升级到 `2.1.0` 及以上版本，它会自动将 `pymongo` 从 `4.6.3` 升级到 `4.17.0+`。但是，旧版本的 `motor`（异步 MongoDB 驱动）**不兼容** `pymongo 4.17.0`，因为新版 `pymongo` 删除了内部接口 `_QUERY_OPTIONS`，从而导致 FastAPI 应用无法启动。
+
+**解决方案**：将三个相互依赖的包强制降回已验证兼容的版本组合。
+
+```bash
+# 步骤 1：降回 pymongo 和 motor 到兼容版本
+conda run --no-capture-output -p "<你的venv路径>" pip install "pymongo==4.6.3" "motor==3.3.2" --force-reinstall
+
+# 步骤 2：降回 beanie 到兼容版本（不连带升级其依赖）
+conda run --no-capture-output -p "<你的venv路径>" pip install "beanie==1.25.0" --force-reinstall --no-deps
+```
+
+> [!IMPORTANT]
+> 本项目的 `backend/requirements.txt` 已将这三个包**锁定到以下经过验证的兼容版本组合**，请勿随意升级：
+>
+> | 包名 | 锁定版本 |
+> | :--- | :---: |
+> | `pymongo` | `4.6.3` |
+> | `motor` | `3.3.2` |
+> | `beanie` | `1.25.0` |
+
+---
+
 ## 贡献指南
 我们欢迎并感谢任何形式的外部贡献！
 1. 请先在 Issue 中描述您发现的 Bug 或希望添加的新功能。
@@ -134,6 +161,7 @@ npm run dev
 - *以及古籍研究团队的业务专家*
 
 ## 版本历史
+- **v1.4.1**：实现内网穿透（cpolar 专业版），将公网链接固定于 `ancient-texts.cpolar.top`；将前端开发服务端口从 `5173` 迁移到 `5175` 以防止与其他项目冲突；将 `pymongo`/`motor`/`beanie` 依赖版本锁定，根治启动时的 `ImportError` 报错。
 - **v1.4.0**：重磅推出“知识图谱”交互模块（集成 DeepSeek AI 自动提取笔记标签及 D3.js 力导向图动态渲染），并上线全新“使用帮助”竖版文档模块。
 - **v1.3.0**：新增完整的“法律条文”智能解析、展示、PDF导出功能；彻底迁移底层数据库为 MongoDB (Beanie)。
 - **v1.2.0**：全面打通 JWT 用户注册与登录鉴权全栈流程，修复若干并发问题。
