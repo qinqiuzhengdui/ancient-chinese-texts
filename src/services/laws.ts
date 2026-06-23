@@ -1,9 +1,9 @@
 import api from './api';
 
 export interface LawNode {
-  level: str;
-  prefix: str;
-  content: str;
+  level: string;
+  prefix: string;
+  content: string;
   children?: LawNode[];
 }
 

@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getLaws, getLawById, importLaw, updateLaw, deleteLaw, LawListResponse, LawResponse, LawNode } from '../services/laws';
+import { getLaws, getLawById, importLaw, updateLaw, deleteLaw } from '../services/laws';
+import type { LawListResponse, LawResponse, LawNode } from '../services/laws';
 import { useReactToPrint } from 'react-to-print';
-import { Search, Upload, FileText, Trash2, Edit, Save, X } from 'lucide-react';
+import { Upload, FileText, Trash2, Edit, Save, X } from 'lucide-react';
 import './Laws.css';
 
 const Laws = () => {
@@ -14,7 +15,7 @@ const Laws = () => {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = useReactToPrint({
-    content: () => contentRef.current,
+    contentRef: contentRef,
     documentTitle: selectedLaw?.title || '法律条文',
   });
 

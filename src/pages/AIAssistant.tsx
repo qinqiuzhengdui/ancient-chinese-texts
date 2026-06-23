@@ -180,11 +180,12 @@ const AIAssistant = () => {
                     remarkPlugins={[remarkGfm, remarkBreaks]}
                     components={{
                       code(props) {
-                        const {children, className, node, ...rest} = props
+                        const {children, className, node, ref, ...rest} = props
                         const match = /language-(\w+)/.exec(className || '')
                         return match ? (
                           <SyntaxHighlighter
                             {...rest}
+                            ref={ref as any}
                             PreTag="div"
                             children={String(children).replace(/\n$/, '')}
                             language={match[1]}
