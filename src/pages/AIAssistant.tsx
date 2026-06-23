@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, Image as ImageIcon, Book, MessageSquare, Save, Settings } from 'lucide-react';
-import { chatAPI, ChatMessage } from '../services/ai';
+import { streamChatAPI, ChatMessage } from '../services/ai';
 import './AIAssistant.css';
 
 const AIAssistant = () => {
@@ -30,16 +30,42 @@ const AIAssistant = () => {
     setInput('');
     setLoading(true);
 
-    try {
-      // Send history to backend
-      const data = await chatAPI(newMessages);
-      setMessages([...newMessages, { role: 'assistant', content: data.response }]);
-    } catch (error: any) {
-      console.error(error);
-      setMessages([...newMessages, { role: 'assistant', content: `[发生错误]: 无法连接到大模型接口。${error.response?.data?.detail || error.message}` }]);
-    } finally {
-      setLoading(false);
-    }
+    // Placeholder for the assistant's streaming response
+    setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+
+    streamChatAPI(
+      newMessages,
+      // onChunk: Append text chunk to the last message
+      (chunk) => {
+        setMessages(prev => {
+          const updated = [...prev];
+          const lastIndex = updated.length - 1;
+          updated[lastIndex] = {
+            ...updated[lastIndex],
+            content: updated[lastIndex].content + chunk
+          };
+          return updated;
+        });
+      },
+      // onError: Append error message
+      (error) => {
+        console.error(error);
+        setMessages(prev => {
+          const updated = [...prev];
+          const lastIndex = updated.length - 1;
+          updated[lastIndex] = {
+            ...updated[lastIndex],
+            content: updated[lastIndex].content + `\n\n[发生错误]: ${error}`
+          };
+          return updated;
+        });
+        setLoading(false);
+      },
+      // onDone: Re-enable inputs
+      () => {
+        setLoading(false);
+      }
+    );
   };
 
   return (
@@ -59,17 +85,10 @@ const AIAssistant = () => {
           {messages.map((msg, idx) => (
             <div key={idx} className={`message-wrapper ${msg.role}`}>
               <div className="message-content">
-                {msg.content}
+                {msg.content || (loading && idx === messages.length - 1 ? <span className="loading-indicator">大模型正在思考...</span> : '')}
               </div>
             </div>
           ))}
-          {loading && (
-            <div className="message-wrapper assistant">
-              <div className="message-content loading-indicator">
-                大模型正在引经据典，请稍候...
-              </div>
-            </div>
-          )}
           <div ref={messagesEndRef} />
         </div>
 

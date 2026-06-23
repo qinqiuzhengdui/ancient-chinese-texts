@@ -1,13 +1,14 @@
 from fastapi import APIRouter, HTTPException, Depends
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import List
 from openai import AsyncOpenAI
 from core.config import settings
+import json
 
 router = APIRouter()
 
 # Initialize DeepSeek client
-# DeepSeek API is fully compatible with OpenAI SDK
 client = AsyncOpenAI(
     api_key=settings.DEEPSEEK_API_KEY,
     base_url="https://api.deepseek.com"
@@ -36,16 +37,28 @@ async def chat(request: ChatRequest):
         for msg in request.messages:
             api_messages.append({"role": msg.role, "content": msg.content})
             
-        # Call DeepSeek API
-        response = await client.chat.completions.create(
-            model="deepseek-chat",
-            messages=api_messages,
-            temperature=0.7,
-            max_tokens=2048
-        )
-        
-        reply_content = response.choices[0].message.content
-        return {"response": reply_content}
+        async def generate():
+            try:
+                response = await client.chat.completions.create(
+                    model="deepseek-chat",
+                    messages=api_messages,
+                    temperature=0.7,
+                    max_tokens=2048,
+                    stream=True
+                )
+                
+                async for chunk in response:
+                    content = chunk.choices[0].delta.content
+                    if content is not None:
+                        # Server-Sent Events (SSE) format
+                        yield f"data: {json.dumps({'content': content}, ensure_ascii=False)}\n\n"
+                
+                yield "data: [DONE]\n\n"
+            except Exception as e:
+                yield f"data: {json.dumps({'error': str(e)}, ensure_ascii=False)}\n\n"
+                yield "data: [DONE]\n\n"
+
+        return StreamingResponse(generate(), media_type="text/event-stream")
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
