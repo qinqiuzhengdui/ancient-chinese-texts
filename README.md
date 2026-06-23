@@ -99,15 +99,20 @@ cd "Ancient Chinese Texts Project"
 # 1. 在项目根目录的 venv 文件夹中创建局部 conda 环境，并指定 Python 3.11.9
 conda create -y --prefix "C:\Users\Asus\Desktop\Ancient Chinese Texts Project\venv" python=3.11.9
 
-# 2. 安装后端依赖清单
+# 2. 安装后端依赖清单（所有版本均已锁定，请勿使用 pip upgrade 或手动升级）
 conda run --no-capture-output -p "C:\Users\Asus\Desktop\Ancient Chinese Texts Project\venv" pip install -r backend/requirements.txt
 
 # 3. 配置数据库与启动 (环境需预装 MongoDB 与 Redis)
 # 请确保 backend/.env 文件中的 MONGODB_URL 和 REDIS_URL 配置正确
 conda run --no-capture-output -p "C:\Users\Asus\Desktop\Ancient Chinese Texts Project\venv" --cwd backend uvicorn main:app --reload --port 8000
 ```
+
+> [!WARNING]
+> **依赖版本已严格锁定，请勿随意升级！** `pymongo`、`motor`、`beanie` 三个包之间存在已知的版本兼容性问题。若安装后出现 `ImportError: cannot import name '_QUERY_OPTIONS'` 或 `No module named 'bson.binary'` 错误，请参阅下方**故障排查**章节进行修复。
+
 > [!TIP]
 > 启动成功后，浏览器访问 [http://localhost:8000/docs](http://localhost:8000/docs) 即可查看和测试由 FastAPI 自动生成的交互式 API 接口文档。
+
 
 ### 3. 前端启动步骤 (Frontend)
 请确保您的电脑已安装 Node.js (v18+)。打开一个**新的终端窗口**，确保位于项目根目录 `Ancient Chinese Texts Project` 下。
@@ -125,19 +130,42 @@ npm run dev
 
 ## 常见问题 / 故障排查 (Troubleshooting)
 
-### ❌ 问题：启动后端时报 `ImportError: cannot import name '_QUERY_OPTIONS' from 'pymongo.cursor'`
+### ❌ 问题：启动后端时报 `ImportError` 或 `ModuleNotFoundError`
 
-**原因**：这是一个依赖版本冲突的经典问题。当使用 `pip install -r requirements.txt` 时，`beanie` 若被升级到 `2.1.0` 及以上版本，它会自动将 `pymongo` 从 `4.6.3` 升级到 `4.17.0+`。但是，旧版本的 `motor`（异步 MongoDB 驱动）**不兼容** `pymongo 4.17.0`，因为新版 `pymongo` 删除了内部接口 `_QUERY_OPTIONS`，从而导致 FastAPI 应用无法启动。
+本项目可能出现以下两种报错，均属于同一根因：**`pymongo`/`motor`/`beanie` 依赖版本冲突**。
 
-**解决方案**：将三个相互依赖的包强制降回已验证兼容的版本组合。
+**报错类型 1**：
+```
+ImportError: cannot import name '_QUERY_OPTIONS' from 'pymongo.cursor'
+```
+
+**报错类型 2**（更严重，`bson` C扩展损坏时出现）：
+```
+ModuleNotFoundError: No module named 'bson.binary'
+```
+
+**根本原因**：使用 `pip install -r requirements.txt` 时，若 `beanie` 被升级到 `2.1.0+`，它会自动将 `pymongo` 从 `4.6.3` 升级到 `4.17.0+`。旧版 `motor` 不兼容新版 `pymongo`，导致 FastAPI 应用无法启动。若再使用 `--no-deps` 强制修复，还会损坏 `bson` 的 C 扩展模块，引发第二种报错。
+
+**完整修复步骤**（**必须按顺序执行**）：
 
 ```bash
-# 步骤 1：降回 pymongo 和 motor 到兼容版本
-conda run --no-capture-output -p "<你的venv路径>" pip install "pymongo==4.6.3" "motor==3.3.2" --force-reinstall
+# ⚠️ 第一步：先关闭所有后端服务（Ctrl+C 停止 uvicorn），否则 Windows 会拒绝访问正在使用的 .pyd 文件
 
-# 步骤 2：降回 beanie 到兼容版本（不连带升级其依赖）
-conda run --no-capture-output -p "<你的venv路径>" pip install "beanie==1.25.0" --force-reinstall --no-deps
+# 第二步：完整卸载三个冲突包
+conda run --no-capture-output -p "C:\Users\Asus\Desktop\Ancient Chinese Texts Project\venv" pip uninstall pymongo motor beanie -y
+
+# 第三步：重新安装经过验证的兼容版本组合（带完整依赖，修复 bson C扩展）
+conda run --no-capture-output -p "C:\Users\Asus\Desktop\Ancient Chinese Texts Project\venv" pip install "pymongo==4.6.3" "motor==3.3.2" "beanie==1.25.0"
+
+# 第四步：重新启动后端
+conda run --no-capture-output -p "C:\Users\Asus\Desktop\Ancient Chinese Texts Project\venv" --cwd backend uvicorn main:app --reload --port 8000
 ```
+
+> [!IMPORTANT]
+> **Windows 特有的坑**：若第二步卸载时报 `[WinError 5] 拒绝访问`，说明仍有 Python 进程在运行并锁住了 `.pyd` 文件。请在 PowerShell 中执行以下命令强制结束所有 Python 进程后，再重试第二、三步：
+> ```powershell
+> taskkill /F /IM python.exe /T
+> ```
 
 > [!IMPORTANT]
 > 本项目的 `backend/requirements.txt` 已将这三个包**锁定到以下经过验证的兼容版本组合**，请勿随意升级：
@@ -147,6 +175,43 @@ conda run --no-capture-output -p "<你的venv路径>" pip install "beanie==1.25.
 > | `pymongo` | `4.6.3` |
 > | `motor` | `3.3.2` |
 > | `beanie` | `1.25.0` |
+
+---
+
+### ❌ 问题：通过 cpolar 的 HTTPS 链接访问时，页面显示 `502 Bad Gateway`（HTTP 链接正常）
+
+**现象**：使用 `http://ancient-texts.cpolar.top` 可以正常访问，但切换到 `https://ancient-texts.cpolar.top` 就显示 502 错误页面。
+
+**根本原因：浏览器的「混合内容（Mixed Content）」安全策略 + Vite HMR WebSocket 协议不匹配。**
+
+详细链路分析：
+1. 通过 HTTPS 链接加载页面时，浏览器自动将当前会话标记为「安全上下文」。
+2. Vite 前端开发服务器内置了一个 **HMR 热更新 WebSocket**，用于实时同步代码变化。
+3. **问题关键**：在安全上下文（HTTPS 页面）中，浏览器会强制要求所有 WebSocket 也必须使用**加密协议 `wss://`**（Secure WebSocket）。如果页面尝试从 HTTPS 页面建立一个普通的 `ws://` 连接，浏览器会将其视为「混合内容」并直接阻断。
+4. Vite 默认的 HMR WebSocket 只对外暴露 `ws://` 协议（非加密），当通过 HTTPS 隧道访问时，Vite 客户端脚本尝试建立 `ws://` 连接，浏览器拒绝，导致 WebSocket 握手失败。
+5. cpolar 在等待 WebSocket 握手完成时超时，最终向用户返回 `502 Bad Gateway`。
+
+**修复方案**：在 `vite.config.ts` 的 `server` 配置中，显式指定 HMR 客户端使用 `wss://` 协议和 443 端口，由 cpolar 负责在公网侧完成加密，Vite 本地仍使用普通 HTTP：
+
+```typescript
+// vite.config.ts
+export default defineConfig({
+  server: {
+    port: 5175,
+    allowedHosts: true,
+    hmr: {
+      // 告知 Vite 客户端：WebSocket 请走 wss:// 协议的 443 端口
+      // cpolar 负责在公网做 wss->ws 的转换，本地 Vite 无需配置 SSL
+      clientPort: 443,
+      protocol: 'wss',
+    },
+    proxy: { '/api': { target: 'http://localhost:8000', changeOrigin: true } }
+  }
+})
+```
+
+> [!NOTE]
+> 本项目的 `vite.config.ts` 已包含此配置，**无需手动修改**。若从旧版本迁移过来，请对照上方代码检查 `hmr` 字段是否存在。
 
 ---
 
@@ -161,7 +226,7 @@ conda run --no-capture-output -p "<你的venv路径>" pip install "beanie==1.25.
 - *以及古籍研究团队的业务专家*
 
 ## 版本历史
-- **v1.4.1**：实现内网穿透（cpolar 专业版），将公网链接固定于 `ancient-texts.cpolar.top`；将前端开发服务端口从 `5173` 迁移到 `5175` 以防止与其他项目冲突；将 `pymongo`/`motor`/`beanie` 依赖版本锁定，根治启动时的 `ImportError` 报错。
+- **v1.4.1**：实现内网穿透（cpolar 专业版），将公网链接固定于 `ancient-texts.cpolar.top`；将前端开发服务端口从 `5173` 迁移到 `5175` 以防止与其他项目冲突；将 `pymongo`/`motor`/`beanie` 依赖版本锁定，根治启动时的 `ImportError` 报错；修复 Vite HMR WebSocket 协议问题，使 HTTPS 公网链接可正常访问。
 - **v1.4.0**：重磅推出“知识图谱”交互模块（集成 DeepSeek AI 自动提取笔记标签及 D3.js 力导向图动态渲染），并上线全新“使用帮助”竖版文档模块。
 - **v1.3.0**：新增完整的“法律条文”智能解析、展示、PDF导出功能；彻底迁移底层数据库为 MongoDB (Beanie)。
 - **v1.2.0**：全面打通 JWT 用户注册与登录鉴权全栈流程，修复若干并发问题。
