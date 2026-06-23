@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, Image as ImageIcon, Book, MessageSquare, Save, Settings } from 'lucide-react';
-import { streamChatAPI, ChatMessage } from '../services/ai';
+import { streamChatAPI, type ChatMessage } from '../services/ai';
+import ReactMarkdown from 'react-markdown';
 import './AIAssistant.css';
 
 const AIAssistant = () => {
@@ -84,8 +85,11 @@ const AIAssistant = () => {
         <div className="ai-messages">
           {messages.map((msg, idx) => (
             <div key={idx} className={`message-wrapper ${msg.role}`}>
-              <div className="message-content">
-                {msg.content || (loading && idx === messages.length - 1 ? <span className="loading-indicator">大模型正在思考...</span> : '')}
+              <div className="message-content markdown-body">
+                {msg.content ? <ReactMarkdown>{msg.content}</ReactMarkdown> : ''}
+                {(loading && idx === messages.length - 1 && !msg.content) && (
+                  <span className="loading-indicator">大模型正在思考...</span>
+                )}
               </div>
             </div>
           ))}

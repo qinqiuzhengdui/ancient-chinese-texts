@@ -146,3 +146,32 @@
   50% { opacity: 1; }
   100% { opacity: 0.6; }
 }
+
+/* Markdown Rendering Styles */
+.markdown-body {
+  font-size: 1rem;
+}
+
+.markdown-body p {
+  margin-top: 0;
+  margin-bottom: 0.8rem;
+}
+
+.markdown-body p:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body ul, .markdown-body ol {
+  margin-top: 0.5rem;
+  margin-bottom: 0.8rem;
+  padding-left: 1.5rem;
+}
+
+.markdown-body li {
+  margin-bottom: 0.25rem;
+}
+
+.markdown-body strong {
+  font-weight: 600;
+  color: inherit;
+}

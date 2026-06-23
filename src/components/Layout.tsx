@@ -1,5 +1,5 @@
 import { Link, Outlet, useLocation } from 'react-router-dom';
-import { User, Search, BookOpen } from 'lucide-react';
+import { User, BookOpen } from 'lucide-react';
 import './Layout.css';
 
 const Layout = () => {
