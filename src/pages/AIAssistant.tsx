@@ -108,7 +108,11 @@ const AIAssistant = () => {
       setNotebookContent(''); // clear notebook after save
     } catch (err: any) {
       console.error(err);
-      alert(err.response?.data?.detail || '保存笔记失败，请确认您已登录。');
+      if (err.response?.status === 401) {
+        alert('你还未登录，暂时无法使用该功能');
+      } else {
+        alert(err.response?.data?.detail || '保存笔记失败，请重试。');
+      }
     } finally {
       setSavingNote(false);
     }
@@ -122,8 +126,12 @@ const AIAssistant = () => {
       alert('success');
       setSkillUrl('');
       loadSkills();
-    } catch (err) {
-      alert('fail');
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        alert('你还未登录，暂时无法使用该功能');
+      } else {
+        alert('fail');
+      }
     } finally {
       setImportingSkill(false);
     }
@@ -137,8 +145,12 @@ const AIAssistant = () => {
       await uploadSkillZip(file);
       alert('success');
       loadSkills();
-    } catch (err) {
-      alert('fail');
+    } catch (err: any) {
+      if (err.response?.status === 401) {
+        alert('你还未登录，暂时无法使用该功能');
+      } else {
+        alert('fail');
+      }
     } finally {
       setImportingSkill(false);
       // clear input
