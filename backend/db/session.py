@@ -1,12 +1,19 @@
-import motor.motor_asyncio
-from beanie import init_beanie
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
 from core.config import settings
-from models.user import User
+import redis.asyncio as redis
 
-async def init_db():
-    """Initialize MongoDB connection and Beanie ODM."""
-    client = motor.motor_asyncio.AsyncIOMotorClient(settings.MONGODB_URL)
-    await init_beanie(
-        database=client[settings.DATABASE_NAME],
-        document_models=[User]
-    )
+engine = create_engine(settings.MYSQL_URL, pool_pre_ping=True)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+Base = declarative_base()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# Redis client
+redis_client = redis.from_url(settings.REDIS_URL, decode_responses=True)

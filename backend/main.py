@@ -3,11 +3,9 @@ from contextlib import asynccontextmanager
 from core.config import settings
 from api import auth, ai_assistant
 from fastapi.middleware.cors import CORSMiddleware
-from db.session import init_db
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    await init_db()
+    # Setup can go here (e.g., test Redis connection)
     yield
 
 app = FastAPI(
