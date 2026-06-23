@@ -1,9 +1,11 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from typing import List
 from datetime import datetime
 from beanie import PydanticObjectId
 
 class NoteBase(BaseModel):
     content: str
+    tags: List[str] = Field(default_factory=list)
 
 class NoteCreate(NoteBase):
     pass
