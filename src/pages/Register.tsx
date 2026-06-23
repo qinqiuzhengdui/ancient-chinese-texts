@@ -1,13 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { registerAPI } from '../services/auth';
 import './Auth.css';
 
 const Register = () => {
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/login');
+    setError('');
+
+    if (formData.password !== formData.confirmPassword) {
+      setError('两次输入的密码不一致！');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await registerAPI(formData.username, formData.email, formData.password);
+      alert('注册成功，请前往登录！');
+      navigate('/login');
+    } catch (err: any) {
+      setError(err.response?.data?.detail || '注册失败，请检查网络或稍后再试');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -15,54 +47,64 @@ const Register = () => {
       <div className="auth-card glass-panel register-card">
         <h2 className="auth-title">新用户注册</h2>
         
+        {error && <div className="auth-error">{error}</div>}
+
         <form onSubmit={handleRegister} className="auth-form">
           <div className="form-group">
             <label className="form-label">用户名</label>
-            <input type="text" className="form-control" placeholder="请输入用户名" required />
-          </div>
-          
-          <div className="form-group">
-            <label className="form-label">真实姓名</label>
-            <input type="text" className="form-control" placeholder="请输入真实姓名（不公开显示）" required />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">手机号</label>
-            <input type="tel" className="form-control" placeholder="请输入手机号" required />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">手机验证码</label>
-            <div className="input-group">
-              <input type="text" className="form-control" placeholder="请输入验证码" required />
-              <button type="button" className="btn btn-outline">获取</button>
-            </div>
+            <input 
+              type="text" 
+              name="username"
+              className="form-control" 
+              placeholder="请输入英文字母或数字" 
+              required 
+              value={formData.username}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="form-group">
             <label className="form-label">邮箱</label>
-            <input type="email" className="form-control" placeholder="请输入邮箱" required />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">邮箱验证码</label>
-            <div className="input-group">
-              <input type="text" className="form-control" placeholder="请输入验证码" required />
-              <button type="button" className="btn btn-outline">获取</button>
-            </div>
+            <input 
+              type="email" 
+              name="email"
+              className="form-control" 
+              placeholder="请输入真实邮箱" 
+              required 
+              value={formData.email}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="form-group">
             <label className="form-label">密码</label>
-            <input type="password" className="form-control" placeholder="请输入密码" required />
+            <input 
+              type="password" 
+              name="password"
+              className="form-control" 
+              placeholder="请输入密码" 
+              required 
+              value={formData.password}
+              onChange={handleChange}
+            />
           </div>
 
           <div className="form-group">
             <label className="form-label">确认密码</label>
-            <input type="password" className="form-control" placeholder="请再次输入密码" required />
+            <input 
+              type="password" 
+              name="confirmPassword"
+              className="form-control" 
+              placeholder="请再次输入密码" 
+              required 
+              value={formData.confirmPassword}
+              onChange={handleChange}
+            />
           </div>
 
-          <button type="submit" className="btn-primary auth-submit-btn">注 册</button>
+          <button type="submit" className="btn-primary auth-submit-btn" disabled={loading}>
+            {loading ? '注册中...' : '注 册'}
+          </button>
         </form>
 
         <div className="auth-footer">

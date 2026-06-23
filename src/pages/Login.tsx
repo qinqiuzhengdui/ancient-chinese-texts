@@ -1,14 +1,42 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { loginAPI } from '../services/auth';
 import './Auth.css';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [loginMethod, setLoginMethod] = useState<'phone' | 'password' | 'email'>('phone');
+  const [loginMethod, setLoginMethod] = useState<'phone' | 'password' | 'email'>('password');
+  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    navigate('/');
+    if (loginMethod !== 'password') {
+      alert('抱歉，手机号/邮箱快捷登录正在开发中，请使用密码登录！');
+      return;
+    }
+
+    setError('');
+    try {
+      setLoading(true);
+      const data = await loginAPI(formData.username, formData.password);
+      // Save token
+      localStorage.setItem('token', data.access_token);
+      alert('登录成功！');
+      navigate('/');
+    } catch (err: any) {
+      setError(err.response?.data?.detail || '登录失败，请检查账号密码');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -16,16 +44,21 @@ const Login = () => {
       <div className="auth-card glass-panel">
         <h2 className="auth-title">登 录</h2>
         
+        {error && <div className="auth-error">{error}</div>}
+
         <div className="auth-tabs">
           <button 
+            type="button"
             className={`auth-tab ${loginMethod === 'phone' ? 'active' : ''}`}
             onClick={() => setLoginMethod('phone')}
           >手机号</button>
           <button 
+            type="button"
             className={`auth-tab ${loginMethod === 'password' ? 'active' : ''}`}
             onClick={() => setLoginMethod('password')}
           >密码</button>
           <button 
+            type="button"
             className={`auth-tab ${loginMethod === 'email' ? 'active' : ''}`}
             onClick={() => setLoginMethod('email')}
           >邮箱</button>
@@ -51,12 +84,28 @@ const Login = () => {
           {loginMethod === 'password' && (
             <>
               <div className="form-group">
-                <label className="form-label">用户名</label>
-                <input type="text" className="form-control" placeholder="请输入用户名" required />
+                <label className="form-label">用户名 / 邮箱</label>
+                <input 
+                  type="text" 
+                  name="username"
+                  className="form-control" 
+                  placeholder="请输入用户名或邮箱" 
+                  required 
+                  value={formData.username}
+                  onChange={handleChange}
+                />
               </div>
               <div className="form-group">
                 <label className="form-label">密码</label>
-                <input type="password" className="form-control" placeholder="请输入密码" required />
+                <input 
+                  type="password" 
+                  name="password"
+                  className="form-control" 
+                  placeholder="请输入密码" 
+                  required 
+                  value={formData.password}
+                  onChange={handleChange}
+                />
               </div>
             </>
           )}
@@ -77,7 +126,9 @@ const Login = () => {
             </>
           )}
 
-          <button type="submit" className="btn-primary auth-submit-btn">登 录</button>
+          <button type="submit" className="btn-primary auth-submit-btn" disabled={loading}>
+            {loading ? '登录中...' : '登 录'}
+          </button>
         </form>
 
         <div className="auth-footer">
