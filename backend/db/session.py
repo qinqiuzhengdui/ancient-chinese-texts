@@ -1,21 +1,12 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base
+import motor.motor_asyncio
+from beanie import init_beanie
 from core.config import settings
+from models.user import User
 
-# 因为使用 SQLite，需要添加 check_same_thread=False
-connect_args = {"check_same_thread": False} if settings.DATABASE_URL.startswith("sqlite") else {}
-
-engine = create_engine(
-    settings.DATABASE_URL, connect_args=connect_args
-)
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
-
-# 数据库依赖项，供 FastAPI 路由使用
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+async def init_db():
+    """Initialize MongoDB connection and Beanie ODM."""
+    client = motor.motor_asyncio.AsyncIOMotorClient(settings.MONGODB_URL)
+    await init_beanie(
+        database=client[settings.DATABASE_NAME],
+        document_models=[User]
+    )

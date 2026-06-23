@@ -2,8 +2,10 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "Ancient Chinese Texts API"
-    # 暂定使用 SQLite 本地数据库，方便开发。后期可替换为 postgresql://user:password@localhost/dbname
-    DATABASE_URL: str = "sqlite:///./ancient_texts.db"
+    MONGODB_URL: str = "mongodb://localhost:27017"
+    DATABASE_NAME: str = "ancient_texts"
+    SECRET_KEY: str
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 1440
     
     class Config:
         env_file = ".env"

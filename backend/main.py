@@ -1,12 +1,20 @@
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
 from core.config import settings
 from api import auth, ai_assistant
 from fastapi.middleware.cors import CORSMiddleware
+from db.session import init_db
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await init_db()
+    yield
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     description="API for Ancient Chinese Texts Smart Platform",
-    version="1.0.0"
+    version="1.0.0",
+    lifespan=lifespan
 )
 
 # 配置 CORS，允许前端跨域请求

@@ -1,7 +1,7 @@
 # 中华古籍智慧化服务平台 (Ancient Chinese Texts Smart Platform)
 
 ## 简介
-本项目是一个专注于中国古代典籍数字化与智能化研究的现代化前端应用程序。它通过提供优雅的中国风用户界面，结合现代Web技术，旨在为国学爱好者、历史研究人员及社会公众提供一个包含古籍检索、高清阅读、AI辅助研究等功能的综合性服务平台。
+本项目是一个专注于中国古代典籍数字化与智能化研究的现代全栈（Full-stack）应用程序。它旨在为国学爱好者、历史研究人员及社会公众提供一个包含古籍检索、高清阅读、AI辅助研究等功能的综合性服务平台。项目由高保真的国风 React 前端与基于 FastAPI 构建的高性能 AI 后端协同驱动。
 
 ## 目的
 我们致力于为社会公众提供开放共享、全面多元的古籍资源，并通过科技赋能（如人工智能大模型、OCR识别、知识图谱等），降低古籍阅读与研究的门槛，提供便捷高效的知识服务，推动中国传统文化的传承与普及。
@@ -15,87 +15,89 @@
 - **极致的视觉体验**：全局采用“青瓷/竹绿”国风主题配色，结合现代化的毛玻璃（Glassmorphism）与微动效设计。
 
 ## 技术栈
+
+### 前端 (Frontend)
 - **核心框架**: React 18
 - **构建工具**: Vite
 - **开发语言**: TypeScript
 - **路由管理**: React Router v6
 - **样式方案**: 纯 CSS3 (CSS Variables + CSS Modules/Global CSS)
-- **图标库**: Lucide-React
 
-## 依赖关系
-运行本项目需要以下核心环境与依赖：
-- Node.js (推荐 v18.0.0 及以上版本)
-- npm 或 yarn 包管理器
-- 核心 npm 包：`react`, `react-dom`, `react-router-dom`, `lucide-react`
+### 后端 (Backend)
+- **核心框架**: FastAPI
+- **开发语言**: Python 3.11+
+- **数据库与 ORM**: SQLite (开发期过渡) / PostgreSQL (生产期) + SQLAlchemy
+- **数据校验**: Pydantic
+- **环境管理**: Conda
 
 ## 兼容性
-本项目采用现代 Web 技术标准构建，兼容以下主流现代浏览器：
-- Google Chrome (推荐)
-- Microsoft Edge
-- Mozilla Firefox
-- Safari
-*(注：由于使用了 CSS backdrop-filter 等较新特性，不建议在 Internet Explorer 及极低版本的浏览器上运行)*
+本项目前端采用现代 Web 技术标准构建，兼容以下主流现代浏览器：Google Chrome, Microsoft Edge, Safari, Firefox。由于使用了较新的 CSS 属性，不建议在极低版本浏览器（如 IE）上运行。
 
-## 安装指南
-请按照以下步骤在您的本地环境中安装并运行该项目：
+---
 
-1. **克隆项目到本地**：
-   ```bash
-   git clone <repository-url>
-   cd "Ancient Chinese Texts Project"
-   ```
+## 快速开始 (Quick Start)
 
-2. **安装依赖项**：
-   ```bash
-   npm install
-   ```
+本项目采用前后端同仓（Monorepo）结构，请分别启动前端与后端服务。
 
-3. **启动开发服务器**：
-   ```bash
-   npm run dev
-   ```
+### 1. 克隆项目到本地
+```bash
+git clone <repository-url>
+cd "Ancient Chinese Texts Project"
+```
 
-## 使用说明
-启动开发服务器后，终端会输出一个本地访问地址（通常为 `http://localhost:5173`）。
-- **访问页面**：在浏览器中打开该地址即可看到首页。
-- **导航体验**：通过顶部的毛玻璃导航栏，可以切换至“AI助手”、“个人中心”等核心功能区。
-- **开发与构建**：如需构建生产环境代码，请运行 `npm run build`，编译后的文件将生成在 `dist` 目录下。
+### 2. 后端启动步骤 (Backend)
+强烈推荐使用 **Conda** 和 **Python 3.11.x** 以避免 C++ 底层库编译报错。
+
+```bash
+# 1. 在项目根目录的 venv 文件夹中创建局部 conda 环境，并指定 Python 3.11.9
+conda create -y --prefix "C:\Users\Asus\Desktop\Ancient Chinese Texts Project\venv" python=3.11.9
+
+# 2. 安装后端依赖清单 (无需激活环境，直接使用 conda run 执行)
+conda run --no-capture-output -p "C:\Users\Asus\Desktop\Ancient Chinese Texts Project\venv" pip install -r backend/requirements.txt
+
+# 3. 启动 FastAPI 本地开发服务器
+conda run --no-capture-output -p "C:\Users\Asus\Desktop\Ancient Chinese Texts Project\venv" --cwd backend uvicorn main:app --reload --port 8000
+```
+> [!TIP]
+> 启动成功后，浏览器访问 [http://localhost:8000/docs](http://localhost:8000/docs) 即可查看和测试由 FastAPI 自动生成的交互式 API 接口文档。
+
+### 3. 前端启动步骤 (Frontend)
+请确保您的电脑已安装 Node.js (v18+)。打开一个**新的终端窗口**，确保位于项目根目录 `Ancient Chinese Texts Project` 下。
+
+```bash
+# 1. 安装前端依赖
+npm install
+
+# 2. 启动前端开发服务器
+npm run dev
+```
+前端启动后，默认可通过 [http://localhost:5173](http://localhost:5173) 访问应用首页。
+
+---
 
 ## 示例
-您可以在启动项目后，导航至 `/ai-assistant` 页面，尝试在左侧聊天框中输入古文片段，并体验右侧 Notebook 笔记联动的操作流程。
+您可以启动前后端后，导航至前端的 `/ai-assistant` 页面，测试左侧聊天框输入古文片段，并体验右侧 Notebook 笔记联动的操作流程。
 
 ## 贡献指南
-我们欢迎并感谢任何形式的外部贡献！如果您希望参与建设：
+我们欢迎并感谢任何形式的外部贡献！
 1. 请先在 Issue 中描述您发现的 Bug 或希望添加的新功能。
 2. Fork 本仓库，并在您的分支上进行开发。
 3. 提交 Pull Request (PR)，并在描述中关联对应的 Issue。
-4. 代码请遵循统一的 ESLint 与 Prettier 格式化规范。
 
 ## 维护者
-- **Antigravity** (核心开发者 / 架构与前端实现)
+- **Antigravity** (核心开发者 / 架构与全栈实现)
 - *以及古籍研究团队的业务专家*
 
 ## 版本历史
-- **v1.0.0 (当前)**：完成平台 1.0 版本前端基础架构搭建，实现首页、多模式注册登录、AI古籍助手及个人中心界面，确立全局国风UI规范。
+- **v1.1.0**：搭建 Python FastAPI 后端基础架构，配置 Conda 虚拟环境、SQLAlchemy 实体模型及 Pydantic 校验。
+- **v1.0.0**：完成平台前端基础架构搭建，实现首页、多模式注册登录、AI古籍助手及个人中心界面，确立全局国风UI规范。
 
 ## 许可证
 本项目目前未选择任何开源许可证（**None**）。即保留所有权利（All Rights Reserved）。未经作者明确书面允许，不得擅自复制、修改、分发或用于商业用途。
 
-## 安全性
-本项目前端代码中不包含敏感的 API 密钥硬编码。涉及到用户登录（密码、手机号等）的数据均应在后端经过加密传输（HTTPS）及散列存储。若您发现潜在的安全漏洞，请通过私信或邮件联系维护者，切勿直接在公开 Issue 中讨论。
-
 ## 致谢
-感谢《项目计划书》提供者及相关开源工具（React, Vite, Lucide）的作者。特别感谢为古籍数字化做出贡献的开源语料库及大模型团队。
+感谢《项目计划书》提供者及相关开源工具的作者。特别感谢为古籍数字化做出贡献的开源语料库及大模型团队。
 
 ## 联系方式
-如有任何问题或合作意向，可以通过以下方式联系我们：
 - 邮箱: support@ancient-texts.example.com
 - Github: [Ancient-Texts-Project Issues](#)
-
-## 状态
-🟢 **活跃 (Active)**：本项目正在积极开发与维护中，目前处于前端快速迭代阶段。
-
-## 相关资源
-- [React 官方文档](https://react.dev/)
-- [Vite 官方文档](https://cn.vitejs.dev/)
-- [Lucide 图标库](https://lucide.dev/)
