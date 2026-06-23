@@ -20,7 +20,7 @@ export const streamChatAPI = async (
   const token = localStorage.getItem('token');
   
   try {
-    const response = await fetch('http://localhost:8000/api/ai/chat', {
+    const response = await fetch('/api/ai/chat', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -19,7 +19,7 @@ app = FastAPI(
 # 配置 CORS，允许前端跨域请求
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"], # 前端开发服务器地址
+    allow_origins=["http://localhost:5175", "http://127.0.0.1:5175"], # 前端开发服务器地址
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -119,7 +119,7 @@ npm install
 # 2. 启动前端开发服务器
 npm run dev
 ```
-前端启动后，默认可通过 [http://localhost:5173](http://localhost:5173) 访问应用首页。
+前端启动后，默认可通过 [http://localhost:5175](http://localhost:5175) 访问应用首页。
 
 ---
 

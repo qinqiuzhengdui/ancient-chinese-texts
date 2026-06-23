@@ -1,8 +1,8 @@
 import axios from 'axios';
 
-// Create an Axios instance with base URL pointing to the FastAPI backend
+// Create an Axios instance using relative path so Vite proxy can handle it during tunneling
 const api = axios.create({
-  baseURL: 'http://localhost:8000',
+  baseURL: '',
   timeout: 10000,
 });
 
