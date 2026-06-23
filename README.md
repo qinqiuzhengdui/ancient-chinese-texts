@@ -26,8 +26,10 @@
 ### 后端 (Backend)
 - **核心框架**: FastAPI
 - **开发语言**: Python 3.11+
-- **数据库与 ORM**: SQLite (开发期过渡) / PostgreSQL (生产期) + SQLAlchemy
+- **数据库架构**: MySQL (持久化核心数据) + Redis (高速缓存与频控)
+- **ORM & 迁移**: SQLAlchemy + Alembic
 - **数据校验**: Pydantic
+- **安全鉴权**: JWT (JSON Web Tokens) + passlib (bcrypt加密)
 - **环境管理**: Conda
 
 ## 兼容性
@@ -55,7 +57,8 @@ conda create -y --prefix "C:\Users\Asus\Desktop\Ancient Chinese Texts Project\ve
 # 2. 安装后端依赖清单 (无需激活环境，直接使用 conda run 执行)
 conda run --no-capture-output -p "C:\Users\Asus\Desktop\Ancient Chinese Texts Project\venv" pip install -r backend/requirements.txt
 
-# 3. 启动 FastAPI 本地开发服务器
+# 3. 配置数据库与启动 (环境需预装 MySQL 与 Redis)
+# 请确保 backend/.env 文件中的 MYSQL_URL 和 REDIS_URL 配置正确，并执行过 alembic upgrade head
 conda run --no-capture-output -p "C:\Users\Asus\Desktop\Ancient Chinese Texts Project\venv" --cwd backend uvicorn main:app --reload --port 8000
 ```
 > [!TIP]
@@ -89,6 +92,7 @@ npm run dev
 - *以及古籍研究团队的业务专家*
 
 ## 版本历史
+- **v1.2.0**：重构后端存储架构，正式引入 MySQL 作为持久化核心与 Redis 高速缓存，全面打通 JWT 用户注册与登录鉴权全栈流程。
 - **v1.1.0**：搭建 Python FastAPI 后端基础架构，配置 Conda 虚拟环境、SQLAlchemy 实体模型及 Pydantic 校验。
 - **v1.0.0**：完成平台前端基础架构搭建，实现首页、多模式注册登录、AI古籍助手及个人中心界面，确立全局国风UI规范。
 
