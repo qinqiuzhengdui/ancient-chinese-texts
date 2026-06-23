@@ -9,7 +9,10 @@ from alembic import context
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 from core.config import settings
-from models.user import Base
+from db.session import Base
+from models.user import User
+from models.note import Note
+from models.skill import Skill
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.MYSQL_URL)

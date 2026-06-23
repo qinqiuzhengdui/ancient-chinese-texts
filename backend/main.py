@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from core.config import settings
-from api import auth, ai_assistant
+from api import auth, ai_assistant, users, notes, skills
 from fastapi.middleware.cors import CORSMiddleware
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -26,6 +26,9 @@ app.add_middleware(
 
 # 挂载路由
 app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
+app.include_router(users.router, prefix="/api/users", tags=["users"])
+app.include_router(notes.router, prefix="/api/notes", tags=["notes"])
+app.include_router(skills.router, prefix="/api/skills", tags=["skills"])
 app.include_router(ai_assistant.router, prefix="/api/ai", tags=["ai_assistant"])
 
 @app.get("/")

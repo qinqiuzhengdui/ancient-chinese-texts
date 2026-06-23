@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Image as ImageIcon, Book, MessageSquare, Save, Settings } from 'lucide-react';
+import { Send, Image as ImageIcon, Book, MessageSquare, Save, Settings, Download, Upload, Cpu } from 'lucide-react';
 import { streamChatAPI, type ChatMessage } from '../services/ai';
+import { createNote } from '../services/notes';
+import { getMySkills, importSkillByUrl, uploadSkillZip, type SkillResponse } from '../services/skills';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import remarkBreaks from 'remark-breaks';
@@ -14,6 +16,14 @@ const AIAssistant = () => {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [notebookContent, setNotebookContent] = useState('');
+  const [savingNote, setSavingNote] = useState(false);
+  
+  const [skills, setSkills] = useState<SkillResponse[]>([]);
+  const [skillUrl, setSkillUrl] = useState('');
+  const [importingSkill, setImportingSkill] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Auto scroll to bottom
@@ -24,6 +34,19 @@ const AIAssistant = () => {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const loadSkills = async () => {
+    try {
+      const data = await getMySkills();
+      setSkills(data);
+    } catch (err) {
+      console.error("Failed to load skills", err);
+    }
+  };
+
+  useEffect(() => {
+    loadSkills();
+  }, []);
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;
@@ -71,6 +94,56 @@ const AIAssistant = () => {
         setLoading(false);
       }
     );
+  };
+
+  const handleSaveNote = async () => {
+    if (!notebookContent.trim()) {
+      alert('请先输入随笔内容！');
+      return;
+    }
+    try {
+      setSavingNote(true);
+      await createNote(notebookContent);
+      alert('笔记保存成功！可前往个人中心查看。');
+      setNotebookContent(''); // clear notebook after save
+    } catch (err: any) {
+      console.error(err);
+      alert(err.response?.data?.detail || '保存笔记失败，请确认您已登录。');
+    } finally {
+      setSavingNote(false);
+    }
+  };
+
+  const handleImportGit = async () => {
+    if (!skillUrl.trim()) return;
+    try {
+      setImportingSkill(true);
+      await importSkillByUrl(skillUrl);
+      alert('success');
+      setSkillUrl('');
+      loadSkills();
+    } catch (err) {
+      alert('fail');
+    } finally {
+      setImportingSkill(false);
+    }
+  };
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      setImportingSkill(true);
+      await uploadSkillZip(file);
+      alert('success');
+      loadSkills();
+    } catch (err) {
+      alert('fail');
+    } finally {
+      setImportingSkill(false);
+      // clear input
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   return (
@@ -148,12 +221,64 @@ const AIAssistant = () => {
       <div className="ai-notebook-area glass-panel">
         <div className="notebook-header">
           <h3 className="font-serif">Notebook (我的笔记)</h3>
-          <button className="btn-icon" title="保存笔记"><Save size={20} /></button>
+          <button className="btn-icon" title="保存笔记" onClick={handleSaveNote} disabled={savingNote}>
+            <Save size={20} />
+          </button>
         </div>
         <textarea 
           className="notebook-textarea form-control"
           placeholder="您可以在此记录研究灵感、整理AI给出的翻译结果，这些内容将自动保存到您的个人中心..."
+          value={notebookContent}
+          onChange={(e) => setNotebookContent(e.target.value)}
+          disabled={savingNote}
         ></textarea>
+      </div>
+
+      <div className="ai-skills-area glass-panel">
+        <div className="skills-header">
+          <h3 className="font-serif">Skills (我的技能)</h3>
+        </div>
+        
+        <div className="skills-import-box">
+          <div className="import-row">
+            <input 
+              type="text" 
+              className="form-control" 
+              placeholder="输入 http/https/ssh 链接..."
+              value={skillUrl}
+              onChange={(e) => setSkillUrl(e.target.value)}
+              disabled={importingSkill}
+            />
+            <button className="btn-secondary" onClick={handleImportGit} disabled={importingSkill || !skillUrl}>
+              <Download size={14} /> 导入
+            </button>
+          </div>
+          <div className="import-row">
+             <input type="file" accept=".zip" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileUpload} />
+             <button className="btn-outline w-100" onClick={() => fileInputRef.current?.click()} disabled={importingSkill}>
+               <Upload size={14} /> 上传 ZIP 技能包
+             </button>
+          </div>
+        </div>
+
+        <div className="skills-list">
+          {skills.length === 0 ? (
+            <div className="empty-state">
+              <Cpu size={32} color="var(--color-border)" />
+              <p>暂无技能</p>
+            </div>
+          ) : (
+            skills.map(skill => (
+              <div key={skill.id} className="skill-card">
+                <div className="skill-icon"><Cpu size={16} /></div>
+                <div className="skill-info">
+                  <span className="skill-name">{skill.name}</span>
+                  {skill.source_url && <span className="skill-source" title={skill.source_url}>Git</span>}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
