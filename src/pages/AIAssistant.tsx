@@ -1,21 +1,45 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Send, Image as ImageIcon, Book, MessageSquare, Save, Settings } from 'lucide-react';
+import { chatAPI, ChatMessage } from '../services/ai';
 import './AIAssistant.css';
 
 const AIAssistant = () => {
-  const [messages, setMessages] = useState([
-    { role: 'assistant', content: '您好！我是古籍AI助手。我可以帮您提问检索、自动OCR识别古籍图片、自动断句标点（句读）以及古文翻译。请问有什么可以帮您？' }
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    { role: 'assistant', content: '您好！我是古籍AI助手（驱动引擎：DeepSeek-V3）。我可以帮您提问检索、自动OCR识别古籍图片、自动断句标点（句读）以及古文翻译。请问有什么可以帮您？' }
   ]);
   const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-    setMessages([...messages, { role: 'user', content: input }]);
+  // Auto scroll to bottom
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSend = async () => {
+    if (!input.trim() || loading) return;
+    
+    const userMessage: ChatMessage = { role: 'user', content: input };
+    const newMessages = [...messages, userMessage];
+    
+    setMessages(newMessages);
     setInput('');
-    // Mock response
-    setTimeout(() => {
-      setMessages(prev => [...prev, { role: 'assistant', content: '这是一个模拟回复。在实际应用中，这里将调用后端的AI大模型接口，提供针对您输入内容的古籍解析、翻译或检索结果。' }]);
-    }, 1000);
+    setLoading(true);
+
+    try {
+      // Send history to backend
+      const data = await chatAPI(newMessages);
+      setMessages([...newMessages, { role: 'assistant', content: data.response }]);
+    } catch (error: any) {
+      console.error(error);
+      setMessages([...newMessages, { role: 'assistant', content: `[发生错误]: 无法连接到大模型接口。${error.response?.data?.detail || error.message}` }]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -39,6 +63,14 @@ const AIAssistant = () => {
               </div>
             </div>
           ))}
+          {loading && (
+            <div className="message-wrapper assistant">
+              <div className="message-content loading-indicator">
+                大模型正在引经据典，请稍候...
+              </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} />
         </div>
 
         <div className="ai-input-area">
@@ -47,6 +79,7 @@ const AIAssistant = () => {
             placeholder="请输入您的问题、或者粘贴古文进行句读/翻译..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            disabled={loading}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -54,7 +87,7 @@ const AIAssistant = () => {
               }
             }}
           />
-          <button className="ai-send-btn btn-primary" onClick={handleSend}>
+          <button className="ai-send-btn btn-primary" onClick={handleSend} disabled={loading || !input.trim()}>
             <Send size={20} />
           </button>
         </div>
