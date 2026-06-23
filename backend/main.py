@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from core.config import settings
 from db.session import init_db
-from api import auth, ai_assistant, users, notes, skills
+from api import auth, ai_assistant, users, notes, skills, laws
 from fastapi.middleware.cors import CORSMiddleware
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -30,6 +30,7 @@ app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(users.router, prefix="/api/users", tags=["users"])
 app.include_router(notes.router, prefix="/api/notes", tags=["notes"])
 app.include_router(skills.router, prefix="/api/skills", tags=["skills"])
+app.include_router(laws.router, prefix="/api/laws", tags=["laws"])
 app.include_router(ai_assistant.router, prefix="/api/ai", tags=["ai_assistant"])
 
 @app.get("/")

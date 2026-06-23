@@ -1,0 +1,115 @@
+.laws-container {
+  display: flex;
+  height: calc(100vh - 70px); /* Assuming 70px header */
+  background-color: var(--color-background);
+}
+
+.laws-sidebar {
+  width: 300px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-right: 1px solid rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+}
+
+.laws-sidebar-header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.laws-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.law-list-item {
+  padding: 12px;
+  border-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.law-list-item:hover {
+  border-color: var(--color-primary);
+}
+
+.law-list-item.active {
+  background-color: var(--color-primary);
+  color: white;
+}
+
+.laws-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  padding: 32px 48px;
+  overflow-y: auto;
+}
+
+.laws-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  border-bottom: 2px solid var(--color-primary);
+  padding-bottom: 16px;
+}
+
+.law-node-编 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 24px 0 16px 0;
+  color: #8B0000;
+}
+
+.law-node-章 {
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 20px 0 12px 0;
+  color: #2c3e50;
+}
+
+.law-node-节 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 16px 0 12px 0;
+}
+
+.law-node-条 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 12px 0 8px 0;
+}
+
+.law-node-款 {
+  font-size: 1rem;
+  text-indent: 2em;
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+
+.law-node-项 {
+  font-size: 1rem;
+  padding-left: 2em;
+  line-height: 1.8;
+  margin-bottom: 8px;
+}
+
+.law-node-目 {
+  font-size: 1rem;
+  padding-left: 4em;
+  line-height: 1.8;
+  margin-bottom: 8px;
+}

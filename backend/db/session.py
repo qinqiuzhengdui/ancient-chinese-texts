@@ -10,13 +10,15 @@ async def init_db():
     from models.user import User
     from models.note import Note
     from models.skill import Skill
+    from models.law import Law
     
     await init_beanie(
         database=client.get_default_database(),
         document_models=[
             User,
             Note,
-            Skill
+            Skill,
+            Law
         ]
     )
 

@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import AIAssistant from './pages/AIAssistant';
 import PersonalCenter from './pages/PersonalCenter';
+import Laws from './pages/Laws';
 import './index.css';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/ai-assistant" element={<AIAssistant />} />
           <Route path="/personal-center" element={<PersonalCenter />} />
+          <Route path="/laws" element={<Laws />} />
           {/* Fallback route for placeholders */}
           <Route path="*" element={
             <div className="container" style={{ padding: '100px 24px', textAlign: 'center' }}>
