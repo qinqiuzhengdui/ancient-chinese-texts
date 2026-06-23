@@ -2,6 +2,10 @@ import { useState, useRef, useEffect } from 'react';
 import { Send, Image as ImageIcon, Book, MessageSquare, Save, Settings } from 'lucide-react';
 import { streamChatAPI, type ChatMessage } from '../services/ai';
 import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import remarkBreaks from 'remark-breaks';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import './AIAssistant.css';
 
 const AIAssistant = () => {
@@ -86,7 +90,32 @@ const AIAssistant = () => {
           {messages.map((msg, idx) => (
             <div key={idx} className={`message-wrapper ${msg.role}`}>
               <div className="message-content markdown-body">
-                {msg.content ? <ReactMarkdown>{msg.content}</ReactMarkdown> : ''}
+                {msg.content ? (
+                  <ReactMarkdown 
+                    remarkPlugins={[remarkGfm, remarkBreaks]}
+                    components={{
+                      code(props) {
+                        const {children, className, node, ...rest} = props
+                        const match = /language-(\w+)/.exec(className || '')
+                        return match ? (
+                          <SyntaxHighlighter
+                            {...rest}
+                            PreTag="div"
+                            children={String(children).replace(/\n$/, '')}
+                            language={match[1]}
+                            style={vscDarkPlus as any}
+                          />
+                        ) : (
+                          <code {...rest} className={className}>
+                            {children}
+                          </code>
+                        )
+                      }
+                    }}
+                  >
+                    {msg.content}
+                  </ReactMarkdown>
+                ) : ''}
                 {(loading && idx === messages.length - 1 && !msg.content) && (
                   <span className="loading-indicator">大模型正在思考...</span>
                 )}
