@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
-from sqlalchemy.orm import Session
 from typing import List
 import os
 import subprocess
@@ -11,7 +10,6 @@ from schemas.skill import SkillResponse, ImportSkillRequest
 from models.skill import Skill
 from models.user import User
 from api.deps import get_current_user
-from db.session import get_db
 
 router = APIRouter()
 
@@ -23,17 +21,15 @@ if not os.path.exists(SKILLS_DIR):
     os.makedirs(SKILLS_DIR)
 
 @router.get("/my", response_model=List[SkillResponse])
-def get_my_skills(
-    db: Session = Depends(get_db),
+async def get_my_skills(
     current_user: User = Depends(get_current_user)
 ):
-    skills = db.query(Skill).filter(Skill.user_id == current_user.id).order_by(Skill.created_at.desc()).all()
+    skills = await Skill.find(Skill.user_id == str(current_user.id)).sort("-created_at").to_list()
     return skills
 
 @router.post("/import", response_model=SkillResponse)
-def import_skill_git(
+async def import_skill_git(
     req: ImportSkillRequest,
-    db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     url = req.url
@@ -57,21 +53,18 @@ def import_skill_git(
         
     # Save to db
     skill = Skill(
-        user_id=current_user.id,
+        user_id=str(current_user.id),
         name=skill_name,
         source_url=url,
         local_path=local_path
     )
-    db.add(skill)
-    db.commit()
-    db.refresh(skill)
+    await skill.insert()
     
     return skill
 
 @router.post("/upload", response_model=SkillResponse)
 async def upload_skill_zip(
     file: UploadFile = File(...),
-    db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     if not file.filename.endswith('.zip'):
@@ -102,13 +95,11 @@ async def upload_skill_zip(
         
     # Save to db
     skill = Skill(
-        user_id=current_user.id,
+        user_id=str(current_user.id),
         name=skill_name,
         source_url=None,
         local_path=local_path
     )
-    db.add(skill)
-    db.commit()
-    db.refresh(skill)
+    await skill.insert()
     
     return skill

@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
 import random
 from typing import Optional
 from pydantic import BaseModel
@@ -7,7 +6,7 @@ from pydantic import BaseModel
 from schemas.user import UserResponse, UserUpdate
 from models.user import User
 from api.deps import get_current_user
-from db.session import get_db, redis_client
+from db.session import redis_client
 
 router = APIRouter()
 
@@ -37,7 +36,6 @@ async def send_verify_code(req: VerifyRequest):
 @router.put("/me", response_model=UserResponse)
 async def update_current_user(
     user_in: UserUpdate,
-    db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     # Verification logic for phone
@@ -74,7 +72,6 @@ async def update_current_user(
     for field, value in update_data.items():
         setattr(current_user, field, value)
         
-    db.commit()
-    db.refresh(current_user)
+    await current_user.save()
     
     return current_user

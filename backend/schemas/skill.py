@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
+from beanie import PydanticObjectId
 
 class SkillBase(BaseModel):
     name: str
@@ -11,8 +12,8 @@ class SkillCreate(SkillBase):
     pass
 
 class SkillResponse(SkillBase):
-    id: int
-    user_id: int
+    id: PydanticObjectId
+    user_id: str
     created_at: datetime
 
     class Config:

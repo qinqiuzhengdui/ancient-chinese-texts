@@ -1,8 +1,8 @@
 import api from './api';
 
 export interface SkillResponse {
-  id: number;
-  user_id: number;
+  id: string;
+  user_id: string;
   name: string;
   source_url: string | null;
   local_path: string;

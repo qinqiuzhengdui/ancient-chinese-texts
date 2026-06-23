@@ -41,15 +41,17 @@
 
 .nav-links {
   display: flex;
-  gap: 20px;
+  gap: 16px;
+  flex-wrap: nowrap;
 }
 
 .nav-link {
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 500;
   color: var(--color-text-secondary);
   position: relative;
   padding: 8px 4px;
+  white-space: nowrap;
 }
 
 .nav-link:hover {

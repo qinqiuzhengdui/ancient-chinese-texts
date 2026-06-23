@@ -1,9 +1,33 @@
-import { Link, Outlet, useLocation } from 'react-router-dom';
-import { User, BookOpen } from 'lucide-react';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { User, BookOpen, LogOut } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { getUserProfile, type UserProfile } from '../services/user';
 import './Layout.css';
 
 const Layout = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const [user, setUser] = useState<UserProfile | null>(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      getUserProfile()
+        .then(data => setUser(data))
+        .catch(() => {
+          localStorage.removeItem('token');
+          setUser(null);
+        });
+    } else {
+      setUser(null);
+    }
+  }, [location.pathname]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+    navigate('/login');
+  };
 
   const navItems = [
     { name: '首页', path: '/' },
@@ -43,9 +67,24 @@ const Layout = () => {
               <User size={20} />
               <span>个人中心</span>
             </Link>
-            <Link to="/login" className="login-btn btn btn-outline" style={{ marginLeft: '12px' }}>
-              登录/注册
-            </Link>
+            {user ? (
+              <div className="user-menu" style={{ display: 'flex', alignItems: 'center', marginLeft: '12px', gap: '12px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }} onClick={() => navigate('/personal-center')}>
+                  <div style={{ width: '32px', height: '32px', borderRadius: '50%', backgroundColor: '#2f4f4f', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold' }}>
+                    {user.username ? user.username.charAt(0).toUpperCase() : 'U'}
+                  </div>
+                  <span className="user-name" style={{ fontWeight: 500, color: '#2c3e50' }}>{user.username}</span>
+                </div>
+                <button onClick={handleLogout} className="logout-btn btn btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 12px' }}>
+                  <LogOut size={16} />
+                  退出
+                </button>
+              </div>
+            ) : (
+              <Link to="/login" className="login-btn btn btn-outline" style={{ marginLeft: '12px' }}>
+                登录/注册
+              </Link>
+            )}
           </div>
         </div>
       </header>

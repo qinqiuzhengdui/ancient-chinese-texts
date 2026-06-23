@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
+from beanie import PydanticObjectId
 
 # Shared properties
 class UserBase(BaseModel):
@@ -10,6 +11,9 @@ class UserBase(BaseModel):
 # Properties to receive via API on creation
 class UserCreate(UserBase):
     password: str
+    phone: str
+    phone_code: str
+    email_code: str
 
 # Properties to receive via API on update (Personal Center)
 class UserUpdate(BaseModel):
@@ -30,7 +34,7 @@ class UserUpdate(BaseModel):
 
 # Properties to return to client
 class UserResponse(UserBase):
-    id: int
+    id: PydanticObjectId
     real_name: Optional[str] = None
     phone: Optional[str] = None
     birth_date: Optional[datetime] = None

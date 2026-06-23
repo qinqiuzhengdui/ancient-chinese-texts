@@ -97,6 +97,16 @@
   text-decoration: underline;
 }
 
+.verify-input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.verify-btn {
+  white-space: nowrap;
+  padding: 0 16px;
+}
+
 .auth-error {
   color: #ff4d4f;
   margin-bottom: 15px;
