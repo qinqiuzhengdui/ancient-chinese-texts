@@ -32,27 +32,31 @@ const Login = () => {
     }
   }, [emailCountdown]);
 
-  const handleSendPhoneCode = async () => {
-    if (!phone) return alert('请先输入手机号');
+  const handleSendPhoneCode = async (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    if (!phone || !phone.trim()) return alert('请先输入手机号');
     try {
-      const res = await sendVerifyCode(phone);
+      const res = await sendVerifyCode(phone.trim());
       setPhoneCountdown(60);
       console.log(`[Phone Verification Code]`, res.code);
       alert(`验证码已发送！测试验证码为: ${res.code} (已输出至浏览器控制台)`);
     } catch (err: any) {
-      alert(err.response?.data?.detail || '发送失败');
+      console.error('Phone code error:', err);
+      alert(err.response?.data?.detail || '发送失败，请检查网络或后端服务');
     }
   };
 
-  const handleSendEmailCode = async () => {
-    if (!email) return alert('请先输入邮箱');
+  const handleSendEmailCode = async (e?: React.MouseEvent) => {
+    if (e) e.preventDefault();
+    if (!email || !email.trim()) return alert('请先输入邮箱');
     try {
-      const res = await sendVerifyCode(email);
+      const res = await sendVerifyCode(email.trim());
       setEmailCountdown(60);
       console.log(`[Email Verification Code]`, res.code);
       alert(`验证码已发送！测试验证码为: ${res.code} (已输出至浏览器控制台)`);
     } catch (err: any) {
-      alert(err.response?.data?.detail || '发送失败');
+      console.error('Email code error:', err);
+      alert(err.response?.data?.detail || '发送失败，请检查网络或后端服务');
     }
   };
 
