@@ -38,9 +38,10 @@ const Register = () => {
   const handleSendPhoneCode = async () => {
     if (!formData.phone) return alert('请先输入手机号');
     try {
-      await sendVerifyCode(formData.phone);
+      const res = await sendVerifyCode(formData.phone);
       setPhoneCountdown(60);
-      alert('验证码已发送至控制台');
+      console.log(`[Phone Verification Code]`, res.code);
+      alert(`验证码已发送！测试验证码为: ${res.code} (已输出至浏览器控制台)`);
     } catch (err: any) {
       alert(err.response?.data?.detail || '发送失败');
     }
@@ -49,9 +50,10 @@ const Register = () => {
   const handleSendEmailCode = async () => {
     if (!formData.email) return alert('请先输入邮箱');
     try {
-      await sendVerifyCode(formData.email);
+      const res = await sendVerifyCode(formData.email);
       setEmailCountdown(60);
-      alert('验证码已发送至控制台');
+      console.log(`[Email Verification Code]`, res.code);
+      alert(`验证码已发送！测试验证码为: ${res.code} (已输出至浏览器控制台)`);
     } catch (err: any) {
       alert(err.response?.data?.detail || '发送失败');
     }

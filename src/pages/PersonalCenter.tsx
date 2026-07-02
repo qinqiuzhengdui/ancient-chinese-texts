@@ -76,10 +76,11 @@ const PersonalCenter = () => {
       return;
     }
     try {
-      await sendVerifyCode(target);
+      const res = await sendVerifyCode(target);
       if (type === 'phone') setPhoneCountdown(60);
       if (type === 'email') setEmailCountdown(60);
-      alert('验证码已发送！(请在后端控制台查看模拟的验证码)');
+      console.log(`[${type === 'phone' ? 'Phone' : 'Email'} Verification Code]`, res.code);
+      alert(`验证码已发送！测试验证码为: ${res.code} (已输出至浏览器控制台)`);
     } catch (err: any) {
       alert(err.response?.data?.detail || '发送验证码失败');
     }

@@ -23,3 +23,12 @@ export const registerAPI = async (username: string, email: string, email_code: s
   });
   return response.data;
 };
+
+export const loginByCodeAPI = async (loginType: 'phone' | 'email', target: string, code: string) => {
+  const response = await api.post('/api/auth/login-code', {
+    login_type: loginType,
+    target,
+    code
+  });
+  return response.data;
+};

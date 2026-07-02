@@ -31,7 +31,10 @@ async def send_verify_code(req: VerifyRequest):
     print(f"[{target}] Verification Code: {code}")
     print(f"=========================================")
     
-    return {"msg": "Verification code sent successfully"}
+    return {
+        "msg": "Verification code sent successfully",
+        "code": code
+    }
 
 @router.put("/me", response_model=UserResponse)
 async def update_current_user(

@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
+from pydantic import BaseModel
 from schemas.user import UserCreate, UserResponse, Token
 from models.user import User
 from core.security import get_password_hash, verify_password, create_access_token
@@ -65,5 +66,44 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends()):
     if not user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
         
+    access_token = create_access_token(subject=str(user.id))
+    return {"access_token": access_token, "token_type": "bearer"}
+
+class CodeLoginRequest(BaseModel):
+    login_type: str # 'phone' or 'email'
+    target: str     # phone number or email address
+    code: str       # verification code
+
+@router.post("/login-code", response_model=Token)
+async def login_code(login_in: CodeLoginRequest):
+    # 1. Verify Code in Redis
+    stored_code = await redis_client.get(f"verify_code_{login_in.target}")
+    if not stored_code or stored_code != login_in.code:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired verification code"
+        )
+        
+    # 2. Find User by phone/email
+    if login_in.login_type == 'phone':
+        user = await User.find_one(User.phone == login_in.target)
+    elif login_in.login_type == 'email':
+        user = await User.find_one(User.email == login_in.target)
+    else:
+        raise HTTPException(status_code=400, detail="Invalid login type")
+        
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Account not found. Please register first."
+        )
+        
+    if not user.is_active:
+        raise HTTPException(status_code=400, detail="Inactive user")
+        
+    # 3. Clean up verification code
+    await redis_client.delete(f"verify_code_{login_in.target}")
+    
+    # 4. Generate Access Token
     access_token = create_access_token(subject=str(user.id))
     return {"access_token": access_token, "token_type": "bearer"}
