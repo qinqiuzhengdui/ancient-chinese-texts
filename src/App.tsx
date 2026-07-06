@@ -8,6 +8,8 @@ import PersonalCenter from './pages/PersonalCenter';
 import Laws from './pages/Laws';
 import Help from './pages/Help';
 import KnowledgeGraph from './pages/KnowledgeGraph';
+import HDModels from './pages/HDModels';
+import HDVerification from './pages/HDVerification';
 import './index.css';
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
           <Route path="/laws" element={<Laws />} />
           <Route path="/help" element={<Help />} />
           <Route path="/knowledge-graph" element={<KnowledgeGraph />} />
+          <Route path="/hd-models" element={<HDModels />} />
+          <Route path="/hd-verification" element={<HDVerification />} />
           {/* Fallback route for placeholders */}
           <Route path="*" element={
             <div className="container" style={{ padding: '100px 24px', textAlign: 'center' }}>

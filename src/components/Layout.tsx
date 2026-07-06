@@ -33,6 +33,7 @@ const Layout = () => {
     { name: '首页', path: '/' },
     { name: '全文数据', path: '/full-text' },
     { name: '高清化模型', path: '/hd-models' },
+    { name: '高清化核对', path: '/hd-verification' },
     { name: '古籍 OCR 识别', path: '/ocr' },
     { name: '知识图谱', path: '/knowledge-graph' },
     { name: '社区', path: '/community' },
