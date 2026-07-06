@@ -18,5 +18,12 @@ export default defineConfig({
         changeOrigin: true,
       }
     }
+  },
+  optimizeDeps: {
+    include: [
+      'react-syntax-highlighter',
+      'react-syntax-highlighter/dist/esm/styles/prism'
+    ]
   }
 })
+
