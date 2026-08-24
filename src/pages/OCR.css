@@ -1,0 +1,333 @@
+.ocr-container {
+  display: flex;
+  height: calc(100vh - 70px);
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  color: #2c3e50;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 20px;
+  gap: 20px;
+}
+
+/* 通用面板标题 */
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(220, 225, 230, 0.8);
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+
+.panel-title h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+/* 1. 左边栏：上传与配置 */
+.ocr-sidebar {
+  width: 300px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.ocr-sidebar-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #5a738e;
+}
+
+.upload-trigger-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px !important;
+}
+
+.form-tip {
+  font-size: 11px;
+  color: #909399;
+}
+
+.warning-tip {
+  color: #e67e22;
+}
+
+.model-select-dropdown {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #dcdfe6;
+  border-radius: 8px;
+  font-size: 13px;
+  background-color: #f5f7fa;
+  color: #909399;
+  cursor: not-allowed;
+  outline: none;
+}
+
+.action-buttons-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.start-ocr-btn {
+  width: 100%;
+  padding: 12px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.reset-btn {
+  width: 100%;
+  padding: 10px !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* 2. 中间栏：影印本预览 */
+.ocr-preview-panel {
+  flex: 1.2;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.image-display-area {
+  flex: 1;
+  border: 2px dashed rgba(220, 225, 230, 0.8);
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #fcfbfa; /* 古典纸张微黄底色 */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+.image-display-area.drop-active:hover {
+  border-color: #c5a059;
+  background-color: rgba(197, 160, 89, 0.02);
+}
+
+.preview-wrapper {
+  width: 100%;
+  height: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preview-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.empty-upload-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 40px;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+
+.placeholder-upload-icon {
+  color: #c5a059;
+  opacity: 0.7;
+  margin-bottom: 16px;
+  transition: transform 0.25s ease;
+}
+
+.empty-upload-placeholder:hover .placeholder-upload-icon {
+  transform: translateY(-4px);
+}
+
+.placeholder-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #5a738e;
+  margin: 0 0 8px 0;
+}
+
+.placeholder-subtext {
+  font-size: 12px;
+  color: #909399;
+}
+
+/* 3. 右边栏：识别结果 */
+.ocr-result-panel {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.result-display-area {
+  flex: 1;
+  border: 1px solid rgba(220, 225, 230, 0.6);
+  border-radius: 12px;
+  background-color: #fafbfc;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.empty-result-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: auto;
+  color: #909399;
+}
+
+.placeholder-result-icon {
+  color: #909399;
+  opacity: 0.5;
+  margin-bottom: 12px;
+}
+
+.empty-result-placeholder p {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+}
+
+.empty-result-placeholder span {
+  font-size: 12px;
+}
+
+.processing-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: auto;
+  gap: 12px;
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid rgba(197, 160, 89, 0.1);
+  border-radius: 50%;
+  border-top-color: #c5a059;
+  animation: spin 1s linear infinite;
+}
+
+.processing-placeholder p {
+  font-size: 14px;
+  font-weight: 600;
+  color: #c5a059;
+  margin: 0;
+}
+
+.processing-placeholder span {
+  font-size: 12px;
+  color: #909399;
+}
+
+.result-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.ocr-text-result {
+  flex: 1;
+  font-family: "Courier New", Courier, monospace;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #2c3e50;
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin: 0 0 16px 0;
+  overflow-y: auto;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid rgba(220, 225, 230, 0.5);
+  border-radius: 8px;
+}
+
+.result-actions-footer {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  flex-shrink: 0;
+}
+
+.icon-gold {
+  color: #c5a059;
+}
+
+.icon-green {
+  color: #52c41a;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}

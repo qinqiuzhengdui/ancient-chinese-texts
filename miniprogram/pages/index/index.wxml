@@ -1,0 +1,488 @@
+<!--pages/index/index.wxml-->
+<view class="dh-tour-container">
+  <!-- 宏伟莫高窟九层楼与大佛实景底图背景 -->
+  <image class="bg-cover-image" src="/images/mogao_bg.jpg" mode="aspectFill"></image>
+  <view class="bg-overlay"></view>
+
+  <!-- 漂浮祥云粒子装饰 -->
+  <view class="cloud-bg cloud-top"></view>
+
+  <!-- 顶部 Logo 标识 -->
+  <view class="dh-header">
+    <view class="logo-box">
+      <text class="logo-txt">敦煌研究院 · 数字敦煌</text>
+      <text class="logo-sub">DUNHUANG ACADEMY · CLOUD TOUR</text>
+    </view>
+  </view>
+
+  <!-- 书法大标题：云游敦煌 -->
+  <view class="title-area">
+    <view class="calligraphy-title">云游敦煌</view>
+    <view class="sub-slogan">一窟一世界 · 梦回大唐盛景</view>
+  </view>
+
+  <!-- 顶栏双核心功能横幅 -->
+  <view class="top-banners-column">
+    <!-- 核心功能 1：“云游壁画修复师”（人机协同修复推演） -->
+    <view class="restorer-banner" bindtap="onOpenRestorer">
+      <view class="banner-badge-row">
+        <text class="banner-badge badge-repair">HITL 人机协同修复</text>
+        <text class="banner-tag">第257窟 · 九色鹿</text>
+      </view>
+      <view class="banner-title">🖌️ “云游壁画修复师”：修复路径推演与校验</view>
+      <view class="banner-desc">U-Net与扩散模型多分支生成 · 人文考据校验存真底线</view>
+    </view>
+
+    <!-- 核心功能 2：须摩提女因缘 人机共创工坊 -->
+    <view class="story-co-create-banner" bindtap="onOpenCoCreate">
+      <view class="banner-badge-row">
+        <text class="banner-badge">多视角叙事共创</text>
+      </view>
+      <view class="banner-title">✨ 第257窟《须摩提女因缘》共创工坊</view>
+      <view class="banner-desc">AI 赋能多视角叙事 · 生成专属敦煌短视频</view>
+    </view>
+  </view>
+
+  <!-- 6 大云端仙境悬浮入口 -->
+  <view class="islands-container">
+    <!-- 1. 看壁画 -->
+    <view class="island-item island-1" bindtap="onOpenModule" data-mod="murals">
+      <view class="island-tag"><text class="tag-txt">看壁画</text></view>
+      <view class="island-circle"><text class="icon-emoji">🎨</text></view>
+      <view class="cloud-pedestal"></view>
+    </view>
+
+    <!-- 2. 看文物 -->
+    <view class="island-item island-2" bindtap="onOpenModule" data-mod="artifacts">
+      <view class="island-tag"><text class="tag-txt">看文物</text></view>
+      <view class="island-circle"><text class="icon-emoji">🏺</text></view>
+      <view class="cloud-pedestal"></view>
+    </view>
+
+    <!-- 3. 看古建 -->
+    <view class="island-item island-3" bindtap="onOpenModule" data-mod="architecture">
+      <view class="island-tag"><text class="tag-txt">看古建</text></view>
+      <view class="island-circle"><text class="icon-emoji">🏯</text></view>
+      <view class="cloud-pedestal"></view>
+    </view>
+
+    <!-- 4. 看期刊 -->
+    <view class="island-item island-4" bindtap="onOpenModule" data-mod="journals">
+      <view class="island-tag"><text class="tag-txt">看期刊</text></view>
+      <view class="island-circle"><text class="icon-emoji">📜</text></view>
+      <view class="cloud-pedestal"></view>
+    </view>
+
+    <!-- 5. 看视频 -->
+    <view class="island-item island-5" bindtap="onOpenModule" data-mod="videos">
+      <view class="island-tag"><text class="tag-txt">看视频</text></view>
+      <view class="island-circle"><text class="icon-emoji">🎬</text></view>
+      <view class="cloud-pedestal"></view>
+    </view>
+
+    <!-- 6. 看漫画 -->
+    <view class="island-item island-6" bindtap="onOpenModule" data-mod="comics">
+      <view class="island-tag"><text class="tag-txt">看漫画</text></view>
+      <view class="island-circle"><text class="icon-emoji">📖</text></view>
+      <view class="cloud-pedestal"></view>
+    </view>
+  </view>
+
+  <!-- 底部透光云海 -->
+  <view class="bottom-scenery">
+    <view class="bottom-clouds-layer"></view>
+  </view>
+
+  <!-- ==========================================================================
+       【全新核心模块】“云游壁画修复师”：人机协同修复路径推演与校验工坊
+       ========================================================================== -->
+  <view class="dh-modal-mask" wx:if="{{showRestorerModal}}" bindtap="closeRestorer">
+    <view class="restorer-sheet" catchtap="preventBubble">
+      <view class="sheet-handle-bar"></view>
+
+      <!-- 头部标题 -->
+      <view class="sheet-header">
+        <view class="sheet-title-box">
+          <text class="sheet-title">云游壁画修复师 · 人机协同推演</text>
+          <text class="sheet-subtitle">实体锚点：莫高窟 第257窟（北魏 · 鹿王本生图）</text>
+        </view>
+        <view class="sheet-close-btn" bindtap="closeRestorer">✕</view>
+      </view>
+
+      <scroll-view scroll-y class="restorer-scroll-area">
+        <!-- 步骤 1：原始壁画与病害区域检测 -->
+        <view class="step-header-tag">
+          <text class="step-num">Step 1</text>
+          <text class="step-title">壁画病害诊断与特征提取（基于第257窟原始壁画）</text>
+        </view>
+
+        <view class="mural-inspect-viewport">
+          <image class="inspect-main-img" src="/images/caves/cave_0257/south_jiuselu.jpg" mode="aspectFit"></image>
+          <view class="defect-highlight-box" style="left: {{currentDefect.box.left}}%; top: {{currentDefect.box.top}}%; width: {{currentDefect.box.width}}%; height: {{currentDefect.box.height}}%;">
+            <view class="defect-box-tag">⚠️ 诊断病害区域</view>
+          </view>
+        </view>
+
+        <!-- 病害选择器 -->
+        <view class="defect-selector-row">
+          <view 
+            class="defect-pill {{activeDefectKey === key ? 'active' : ''}}"
+            wx:for="{{defectOptions}}"
+            wx:key="key"
+            wx:for-index="key"
+            bindtap="onSelectDefect"
+            data-key="{{key}}"
+          >
+            {{item.name}}
+          </view>
+        </view>
+
+        <!-- 病害诊断报告卡片 -->
+        <view class="defect-report-card">
+          <view class="report-title">🔬 算法病害诊断报告</view>
+          <view class="report-row"><text class="r-lbl">病害类型：</text><text class="r-val">{{currentDefect.type}}</text></view>
+          <view class="report-row"><text class="r-lbl">物理机理：</text><text class="r-val">{{currentDefect.cause}}</text></view>
+          <view class="report-row"><text class="r-lbl">修复难点：</text><text class="r-val">{{currentDefect.challenge}}</text></view>
+        </view>
+
+        <!-- 步骤 2：U-Net 与扩散模型生成的修复分支 -->
+        <view class="step-header-tag">
+          <text class="step-num">Step 2</text>
+          <text class="step-title">算法修复分支推演（U-Net & ResShift Diffusion）</text>
+        </view>
+        <view class="branch-sub-hint">算法已生成 3 个不同修复假设分支，请结合考据进行比对：</view>
+
+        <view class="branches-container">
+          <view 
+            class="branch-choice-card {{activeBranchIndex === bIdx ? 'active' : ''}}"
+            wx:for="{{currentDefect.branches}}"
+            wx:key="title"
+            wx:for-index="bIdx"
+            bindtap="onSelectBranch"
+            data-bindex="{{bIdx}}"
+          >
+            <view class="branch-card-header">
+              <view class="branch-radio {{activeBranchIndex === bIdx ? 'checked' : ''}}"></view>
+              <text class="branch-tag-name">{{item.title}}</text>
+              <text class="branch-stance-badge {{item.stanceClass}}">{{item.stance}}</text>
+            </view>
+            <view class="branch-desc">{{item.desc}}</view>
+            <view class="branch-pros-cons">
+              <view class="pro-item"><text class="pro-dot">✓</text>{{item.pro}}</view>
+              <view class="con-item"><text class="con-dot">✗</text>{{item.risk}}</view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 步骤 3：内置人文历史考据提示面板 -->
+        <view class="step-header-tag">
+          <text class="step-num">Step 3</text>
+          <text class="step-title">内置人文历史考据专家库（提示与校验依据）</text>
+        </view>
+
+        <view class="evidence-panel">
+          <view class="evidence-item">
+            <view class="e-icon">🧪</view>
+            <view class="e-content">
+              <view class="e-title">颜料成分与理化机理</view>
+              <view class="e-text">{{currentDefect.evidence.pigment}}</view>
+            </view>
+          </view>
+
+          <view class="evidence-item">
+            <view class="e-icon">🖌️</view>
+            <view class="e-content">
+              <view class="e-title">北魏绘制技法与时代风格</view>
+              <view class="e-text">{{currentDefect.evidence.technique}}</view>
+            </view>
+          </view>
+
+          <view class="evidence-item">
+            <view class="e-icon">📜</view>
+            <view class="e-content">
+              <view class="e-title">图像志惯例与因缘经典</view>
+              <view class="e-text">{{currentDefect.evidence.iconography}}</view>
+            </view>
+          </view>
+
+          <view class="evidence-item">
+            <view class="e-icon">⚖️</view>
+            <view class="e-content">
+              <view class="e-title">文物修复“存真”伦理底线</view>
+              <view class="e-text">{{currentDefect.evidence.ethics}}</view>
+            </view>
+          </view>
+        </view>
+
+        <!-- 步骤 4：用户校验与修复标签打标 -->
+        <view class="step-header-tag">
+          <text class="step-num">Step 4</text>
+          <text class="step-title">人机协同校验打标（沉淀结构化数据）</text>
+        </view>
+
+        <view class="validation-tags-row">
+          <view 
+            class="val-tag {{userTags[vIdx] ? 'active' : ''}}"
+            wx:for="{{currentDefect.verifyTags}}"
+            wx:key="*this"
+            wx:for-index="vIdx"
+            bindtap="onToggleTag"
+            data-vindex="{{vIdx}}"
+          >
+            {{item}}
+          </view>
+        </view>
+      </scroll-view>
+
+      <!-- 底部提交校验与生成数据链条证书 -->
+      <view class="restorer-footer">
+        <button class="submit-repair-btn" bindtap="onSubmitRepairChain">
+          📜 确认人机校验方案 · 沉淀数据链条证书
+        </button>
+      </view>
+    </view>
+  </view>
+
+  <!-- ==========================================================================
+       1. 洞窟选择器半屏弹窗 (Cave Selector Sheet)
+       ========================================================================== -->
+  <view class="dh-modal-mask" wx:if="{{showCaveSelector}}" bindtap="closeCaveSelector">
+    <view class="cave-selector-sheet" catchtap="preventBubble">
+      <view class="sheet-handle-bar"></view>
+      
+      <view class="sheet-header">
+        <view class="sheet-title-box">
+          <text class="sheet-title">敦煌壁画 · 窟室品鉴</text>
+          <text class="sheet-subtitle">请选择您想要云游品鉴的洞窟壁画</text>
+        </view>
+        <view class="sheet-close-btn" bindtap="closeCaveSelector">✕</view>
+      </view>
+
+      <scroll-view scroll-y class="cave-list-scroll">
+        <view 
+          class="cave-choice-card {{selectedCaveId === item.id ? 'active' : ''}}"
+          wx:for="{{caveList}}" 
+          wx:key="id"
+          bindtap="onSelectCave"
+          data-id="{{item.id}}"
+        >
+          <view class="card-left-badge">
+            <text class="badge-num">{{item.shortNum}}</text>
+            <text class="badge-era">{{item.eraTag}}</text>
+          </view>
+          
+          <view class="card-main-info">
+            <view class="card-cave-title">{{item.fullName}}</view>
+            <view class="card-highlight">✨ {{item.highlight}}</view>
+            
+            <view class="wall-tags-row">
+              <text class="wall-tag" wx:for="{{item.walls}}" wx:for-item="w" wx:key="*this">{{w}}</text>
+            </view>
+          </view>
+
+          <view class="card-arrow-icon">→</view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <!-- ==========================================================================
+       2. 沉浸式横屏全景壁画品鉴器 (小巧半透明发光标点)
+       ========================================================================== -->
+  <view class="dh-modal-mask" wx:if="{{showLandscapeViewer}}" bindtap="closeLandscapeViewer">
+    <view class="landscape-mural-modal" catchtap="preventBubble">
+      <view class="sheet-handle-bar"></view>
+
+      <view class="landscape-top-bar">
+        <view class="cave-nav-back" bindtap="backToSelector">
+          <text class="back-arrow">‹</text>
+          <text class="back-text">重选洞窟</text>
+        </view>
+        <view class="landscape-title-area">
+          <text class="viewer-cave-name">{{currentCave.fullName}}</text>
+          <text class="viewer-cave-era">{{currentCave.era}}</text>
+        </view>
+        <view class="sheet-close-btn" bindtap="closeLandscapeViewer">✕</view>
+      </view>
+
+      <view class="landscape-gallery-box">
+        <!-- 横屏画面容器 (支持小巧半透明发光标点与全屏) -->
+        <view class="landscape-image-wrapper">
+          <image 
+            class="landscape-main-image" 
+            src="{{currentWallImage}}" 
+            mode="aspectFit"
+            bindtap="onOpenLightbox"
+          ></image>
+
+          <!-- 画面小巧半透明发光标点（无字遮挡） -->
+          <block wx:if="{{currentCave.wallItems[activeWallIndex].hotspots}}">
+            <view 
+              class="mp-hotspot-pin {{activeHotspot.id === spot.id ? 'active-pin' : ''}}"
+              wx:for="{{currentCave.wallItems[activeWallIndex].hotspots}}"
+              wx:for-item="spot"
+              wx:key="id"
+              style="left: {{spot.x}}%; top: {{spot.y}}%;"
+              catchtap="onTapHotspot"
+              data-spot="{{spot}}"
+            >
+              <view class="mp-hotspot-ring"></view>
+              <view class="mp-hotspot-dot"></view>
+            </view>
+          </block>
+
+          <view class="image-zoom-hint" catchtap="onOpenLightbox">
+            <text class="zoom-icon">🔍</text>
+            <text class="zoom-text">全屏放大</text>
+          </view>
+
+          <view class="image-orient-tag">
+            {{currentCave.wallItems[activeWallIndex].orient}} · {{currentCave.wallItems[activeWallIndex].name}}
+          </view>
+        </view>
+
+        <!-- 点击标点后弹出的热点微观解析卡片 -->
+        <view class="mp-hotspot-card" wx:if="{{activeHotspot}}">
+          <view class="mp-card-top">
+            <view class="mp-badge-box">
+              <text class="mp-card-badge">📍 图像志标点解析</text>
+              <text class="mp-card-title">{{activeHotspot.title}}</text>
+            </view>
+            <view class="mp-card-close" catchtap="onCloseHotspot">✕</view>
+          </view>
+          <view class="mp-card-subtitle">{{activeHotspot.subtitle}}</view>
+          <view class="mp-card-desc">{{activeHotspot.content}}</view>
+        </view>
+
+        <!-- 底部方位切换 Tab -->
+        <scroll-view scroll-x class="wall-tabs-scroll" enable-flex>
+          <view 
+            class="wall-tab-pill {{activeWallIndex === index ? 'active' : ''}}"
+            wx:for="{{currentCave.wallItems}}"
+            wx:key="name"
+            bindtap="onSwitchWall"
+            data-index="{{index}}"
+          >
+            <text class="pill-orient">{{item.orient}}</text>
+            <text class="pill-title">{{item.name}}</text>
+          </view>
+        </scroll-view>
+
+        <view class="wall-info-card">
+          <view class="info-card-header">
+            <text class="info-badge">壁画艺术解析</text>
+            <view class="art-tags-row">
+              <text class="art-pill" wx:for="{{currentCave.wallItems[activeWallIndex].tags}}" wx:key="*this"># {{item}}</text>
+            </view>
+          </view>
+          <view class="info-card-desc">
+            {{currentCave.wallItems[activeWallIndex].desc}}
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ==========================================================================
+       3. 内嵌全屏高清灯箱
+       ========================================================================== -->
+  <view class="fullscreen-lightbox" wx:if="{{showFullScreenLightbox}}" bindtap="onCloseLightbox">
+    <view class="lightbox-close-btn" bindtap="onCloseLightbox">✕ 关闭全屏</view>
+    <image class="lightbox-full-img" src="{{currentWallImage}}" mode="widthFix" catchtap="preventBubble"></image>
+    <view class="lightbox-caption">
+      {{currentCave.fullName}} · {{currentCave.wallItems[activeWallIndex].name}}
+    </view>
+  </view>
+
+  <!-- ==========================================================================
+       4. 须摩提女因缘：多视角人机叙事共创工坊 (来自 1234.docx 核心案例)
+       ========================================================================== -->
+  <view class="dh-modal-mask" wx:if="{{showCoCreateModal}}" bindtap="closeCoCreate">
+    <view class="cocreate-sheet" catchtap="preventBubble">
+      <view class="sheet-handle-bar"></view>
+
+      <!-- 头部 -->
+      <view class="sheet-header">
+        <view class="sheet-title-box">
+          <text class="sheet-title">你来讲敦煌 · 人机叙事共创</text>
+          <text class="sheet-subtitle">莫高窟 第257窟（北魏 · 须摩提女因缘故事画）</text>
+        </view>
+        <view class="sheet-close-btn" bindtap="closeCoCreate">✕</view>
+      </view>
+
+      <scroll-view scroll-y class="cocreate-scroll-area">
+        <!-- 画面局部选择器 (须摩提女请佛 vs 五百力士移山) -->
+        <view class="section-label">1. 选择故事画局部片段</view>
+        <view class="scene-switch-row">
+          <view 
+            class="scene-btn {{activeSceneKey === 'qingfo' ? 'active' : ''}}"
+            bindtap="onSwitchScene" 
+            data-scene="qingfo"
+          >
+            📜 局部一：须摩提女请佛
+          </view>
+          <view 
+            class="scene-btn {{activeSceneKey === 'yishan' ? 'active' : ''}}"
+            bindtap="onSwitchScene" 
+            data-scene="yishan"
+          >
+            ⛰️ 局部二：五百力士移山
+          </view>
+        </view>
+
+        <!-- 当前局部画面与内容解读 -->
+        <view class="scene-content-card">
+          <view class="card-sec-title">【画面内容】</view>
+          <view class="card-sec-body">{{currentSceneData.content}}</view>
+        </view>
+
+        <!-- AI 叙事草稿智能生成中枢 -->
+        <view class="scene-content-card ai-draft-card">
+          <view class="card-sec-title ai-title">🤖 【AI 叙事草稿生成（知识图谱驱动）】</view>
+          <view class="card-sec-body">{{currentSceneData.aiDraft}}</view>
+        </view>
+
+        <!-- 多视角叙事选择路径 -->
+        <view class="section-label">2. 选择共创视角与叙事路径</view>
+        <view class="perspective-grid">
+          <view 
+            class="perspective-card {{activePerspectiveIndex === idx ? 'active' : ''}}"
+            wx:for="{{currentSceneData.perspectives}}" 
+            wx:key="name"
+            bindtap="onSelectPerspective"
+            data-index="{{idx}}"
+          >
+            <view class="p-header">
+              <text class="p-name">{{item.name}}</text>
+              <text class="p-focus">{{item.focus}}</text>
+            </view>
+            <view class="p-desc">{{item.desc}}</view>
+            <view class="p-output">🎯 产出导向：{{item.output}}</view>
+          </view>
+        </view>
+
+        <!-- 配音风格与语气 -->
+        <view class="section-label">3. 选择配音风格与解说语气</view>
+        <view class="voice-style-row">
+          <view 
+            class="voice-chip {{activeVoiceIndex === vIdx ? 'active' : ''}}"
+            wx:for="{{voiceStyles}}" 
+            wx:key="*this" 
+            wx:for-index="vIdx"
+            bindtap="onSelectVoice"
+            data-vindex="{{vIdx}}"
+          >
+            {{item}}
+          </view>
+        </view>
+      </scroll-view>
+
+      <!-- 底部生成按钮 -->
+      <view class="cocreate-footer">
+        <button class="generate-video-btn" bindtap="onGenerateStoryVideo">
+          🎬 合成 AI 叙事短视频 & 上传共创社区
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

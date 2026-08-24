@@ -10,6 +10,8 @@ import Help from './pages/Help';
 import KnowledgeGraph from './pages/KnowledgeGraph';
 import HDModels from './pages/HDModels';
 import HDVerification from './pages/HDVerification';
+import OCR from './pages/OCR';
+import DunhuangTour from './pages/DunhuangTour';
 import './index.css';
 
 function App() {
@@ -21,6 +23,7 @@ function App() {
         
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/dunhuang-tour" element={<DunhuangTour />} />
           <Route path="/ai-assistant" element={<AIAssistant />} />
           <Route path="/personal-center" element={<PersonalCenter />} />
           <Route path="/laws" element={<Laws />} />
@@ -28,6 +31,7 @@ function App() {
           <Route path="/knowledge-graph" element={<KnowledgeGraph />} />
           <Route path="/hd-models" element={<HDModels />} />
           <Route path="/hd-verification" element={<HDVerification />} />
+          <Route path="/ocr" element={<OCR />} />
           {/* Fallback route for placeholders */}
           <Route path="*" element={
             <div className="container" style={{ padding: '100px 24px', textAlign: 'center' }}>

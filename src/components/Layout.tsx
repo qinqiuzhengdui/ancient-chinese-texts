@@ -31,6 +31,7 @@ const Layout = () => {
 
   const navItems = [
     { name: '首页', path: '/' },
+    { name: '云游敦煌', path: '/dunhuang-tour' },
     { name: '全文数据', path: '/full-text' },
     { name: '高清化模型', path: '/hd-models' },
     { name: '高清化核对', path: '/hd-verification' },

@@ -1,0 +1,316 @@
+﻿<krpano version="1.19" title="莫高窟321窟">
+
+	<include url="skin/vtourskin.xml" />
+
+	<!-- customize skin settings: maps, gyro, webvr, thumbnails, tooltips, layout, design, ... -->
+	<skin_settings maps="true"
+	               maps_type="google"
+	               maps_bing_api_key=""
+	               maps_google_api_key=""
+	               maps_zoombuttons="false"
+	               gyro="true"
+	               webvr="true"
+	               webvr_gyro_keeplookingdirection="false"
+	               webvr_prev_next_hotspots="true"
+	               littleplanetintro="false"
+	               title="true"
+	               thumbs="true"
+	               thumbs_width="120" thumbs_height="80" thumbs_padding="10" thumbs_crop="0|40|240|160"
+	               thumbs_opened="false"
+	               thumbs_text="false"
+	               thumbs_dragging="true"
+	               thumbs_onhoverscrolling="false"
+	               thumbs_scrollbuttons="false"
+	               thumbs_scrollindicator="false"
+	               thumbs_loop="false"
+	               tooltips_buttons="false"
+	               tooltips_thumbs="false"
+	               tooltips_hotspots="false"
+	               tooltips_mapspots="false"
+	               deeplinking="false"
+	               loadscene_flags="MERGE"
+	               loadscene_blend="OPENBLEND(0.5, 0.0, 0.75, 0.05, linear)"
+	               loadscene_blend_prev="SLIDEBLEND(0.5, 180, 0.75, linear)"
+	               loadscene_blend_next="SLIDEBLEND(0.5,   0, 0.75, linear)"
+	               loadingtext="loading..."
+	               layout_width="100%"
+	               layout_maxwidth="814"
+	               controlbar_width="-24"
+	               controlbar_height="40"
+	               controlbar_offset="20"
+	               controlbar_offset_closed="-40"
+	               controlbar_overlap.no-fractionalscaling="10"
+	               controlbar_overlap.fractionalscaling="0"
+	               design_skin_images="vtourskin.png"
+	               design_bgcolor="0x2D3E50"
+	               design_bgalpha="0.8"
+	               design_bgborder="0"
+	               design_bgroundedge="1"
+	               design_bgshadow="0 4 10 0x000000 0.3"
+	               design_thumbborder_bgborder="3 0xFFFFFF 1.0"
+	               design_thumbborder_padding="2"
+	               design_thumbborder_bgroundedge="0"
+	               design_text_css="color:#FFFFFF; font-family:Arial;"
+	               design_text_shadow="1"
+	               />
+
+	<!--
+	    For an alternative skin design either change the <skin_settings> values 
+	    from above or optionally include one of the predefined designs from below.
+	-->
+	<!-- <include url="skin/vtourskin_design_flat_light.xml"  /> -->
+	<!-- <include url="skin/vtourskin_design_glass.xml"       /> -->
+	<!-- <include url="skin/vtourskin_design_ultra_light.xml" /> -->
+	<!-- <include url="skin/vtourskin_design_117.xml"         /> -->
+	<!-- <include url="skin/vtourskin_design_117round.xml"    /> -->
+	<!-- <include url="skin/vtourskin_design_black.xml"       /> -->
+
+
+	<!-- startup action - load the first scene -->
+	<action name="startup" autorun="onstart">
+		if(startscene === null OR !scene[get(startscene)], copy(startscene,scene[0].name); );
+		loadscene(get(startscene), null, MERGE);
+		if(startactions !== null, startactions() );
+	</action>
+
+<action name="do_crop_animation">
+		<!-- add attributes to the hotspot -->
+		registerattribute(xframes, calc((imagewidth / %1) BOR 0));
+		registerattribute(yframes, calc((imageheight / %2) BOR 0));
+		registerattribute(frames, calc(xframes * yframes));
+		registerattribute(frame, 0);
+
+		set(crop, '0|0|%1|%2');
+
+		setinterval(calc('crop_anim_' + name), calc(1.0 / %3),
+			if(loaded,
+				inc(frame);
+				if(frame GE frames, if(onlastframe !== null, onlastframe() ); set(frame,0); );
+				mod(xpos, frame, xframes);
+				div(ypos, frame, xframes);
+				Math.floor(ypos);
+				mul(xpos, %1);
+				mul(ypos, %2);
+				calc(crop, xpos + '|' + ypos + '|%1|%2');
+			  ,
+				clearinterval(calc('crop_anim_' + name));
+			  );
+		  );
+	</action>
+
+	
+	<scene name="scene__________" title="主室" onstart="" havevrimage="true" thumburl="panos/_________.tiles/thumb.jpg" lat="0.00000000" lng="0.00000000" heading="0.0">
+
+		<view hlookat="-30.862" vlookat="0.264" fovtype="MFOV" fov="109.668" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/_________.tiles/preview.jpg" />
+
+		<image type="CUBE" prealign="0|0.0|0" multires="true" tilesize="512" if="!webvr.isenabled">
+			<level tiledimagewidth="4608" tiledimageheight="4608">
+				<cube url="panos/_________.tiles/%s/l3/%v/l3_%s_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="2304" tiledimageheight="2304">
+				<cube url="panos/_________.tiles/%s/l2/%v/l2_%s_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="1152" tiledimageheight="1152">
+				<cube url="panos/_________.tiles/%s/l1/%v/l1_%s_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<image prealign="0|0.0|0" if="webvr.isenabled">
+			<cube url="panos/_________.tiles/vr/pano_%s.jpg" />
+		</image>
+
+
+		<layer name="n" keep="true" url="image/yg.jpg" align="center" visible="false"   onclick="tween(alpha,0);delayedcall(0.5,set(visible,false))"/>  	  
+ <hotspot name="h6x11p" url="b.png"  scale="0.5" ath="90.000" atv="-38.000" onclick="if(layer[n].visible,tween(layer[n].alpha,0);delayedcall(0.5,set(layer[n].visible,false)) ,set(layer[n].visible,true);tween(layer[n].alpha,1) )"  />
+<layer name="n" url="image/yg.jpg" align="center"	   
+onloaded="picture_resize(get(name));"  />
+<action name="picture_resize">
+
+<!-- 使用屏幕宽度或高度的百分之九十 -->
+
+div(aspect, layer[%1].imagewidth, layer[%1].imageheight);
+
+mul(new_width, stagewidth, 0.90);
+
+div(new_height, new_width, aspect);
+
+mul(max_height, stageheight, 0.90);
+
+if(new_height GT max_height,
+
+copy(new_height, max_height);
+
+mul(new_width, new_height, aspect);
+
+);
+
+roundval(new_width);
+
+roundval(new_height);
+
+copy(layer[%1].width, new_width);
+
+copy(layer[%1].height, new_height);
+
+</action>
+<events name="picture_period"  
+onpreviewcomplete="set(layer[n].visible,false); tween(layer[n].alpha,1);delayedcall(10,tween(layer[n].alpha,0);delayedcall(0.5,set(layer[n].visible,false););));"/> 
+
+
+
+
+
+
+<layer name="nn" keep="true" url="image/jz.jpg" align="center" visible="false"   onclick="tween(alpha,0);delayedcall(0.5,set(visible,false))"/>  	  
+ <hotspot name="h6x1z1p" url="b.png"  scale="0.5" ath="103.000" atv="-40.000" onclick="if(layer[nn].visible,tween(layer[nn].alpha,0);delayedcall(0.5,set(layer[nn].visible,false)) ,set(layer[nn].visible,true);tween(layer[nn].alpha,1) )"  />
+<layer name="nn" url="image/jz.jpg" align="center"	   
+onloaded="picture_resize(get(name));"  />
+<action name="picture_resize">
+
+<!-- 使用屏幕宽度或高度的百分之九十 -->
+
+div(aspect, layer[%1].imagewidth, layer[%1].imageheight);
+
+mul(new_width, stagewidth, 0.90);
+
+div(new_height, new_width, aspect);
+
+mul(max_height, stageheight, 0.90);
+
+if(new_height GT max_height,
+
+copy(new_height, max_height);
+
+mul(new_width, new_height, aspect);
+
+);
+
+roundval(new_width);
+
+roundval(new_height);
+
+copy(layer[%1].width, new_width);
+
+copy(layer[%1].height, new_height);
+
+</action>
+<events name="picture_period"  
+onpreviewcomplete="set(layer[nn].visible,false); tween(layer[nn].alpha,1);delayedcall(10,tween(layer[nn].alpha,0);delayedcall(0.5,set(layer[nn].visible,false););));"/> 
+
+
+
+
+
+
+
+
+
+<layer name="nnn" keep="true" url="image/fz.jpg" align="center" visible="false"   onclick="tween(alpha,0);delayedcall(0.5,set(visible,false))"/>  	  
+ <hotspot name="h6x1zv1p" url="b.png"  scale="0.5" ath="-120.000" atv="-10.000" onclick="if(layer[nnn].visible,tween(layer[nnn].alpha,0);delayedcall(0.5,set(layer[nnn].visible,false)) ,set(layer[nnn].visible,true);tween(layer[nnn].alpha,1) )"  />
+<layer name="nnn" url="image/fz.jpg" align="center"	   
+onloaded="picture_resize(get(name));"  />
+<action name="picture_resize">
+
+<!-- 使用屏幕宽度或高度的百分之九十 -->
+
+div(aspect, layer[%1].imagewidth, layer[%1].imageheight);
+
+mul(new_width, stagewidth, 0.90);
+
+div(new_height, new_width, aspect);
+
+mul(max_height, stageheight, 0.90);
+
+if(new_height GT max_height,
+
+copy(new_height, max_height);
+
+mul(new_width, new_height, aspect);
+
+);
+
+roundval(new_width);
+
+roundval(new_height);
+
+copy(layer[%1].width, new_width);
+
+copy(layer[%1].height, new_height);
+
+</action>
+<events name="picture_period"  
+onpreviewcomplete="set(layer[nnn].visible,false); tween(layer[nnn].alpha,1);delayedcall(10,tween(layer[nnn].alpha,0);delayedcall(0.5,set(layer[nnn].visible,false););));"/> 
+
+
+
+
+
+
+<layer name="annn" keep="true" url="image/sft.jpg" align="center" visible="false"   onclick="tween(alpha,0);delayedcall(0.5,set(visible,false))"/>  	  
+ <hotspot name="h6x1zva1p" url="b.png"  scale="0.5" ath="-175.000" atv="-40.000" onclick="if(layer[annn].visible,tween(layer[annn].alpha,0);delayedcall(0.5,set(layer[annn].visible,false)) ,set(layer[annn].visible,true);tween(layer[annn].alpha,1) )"  />
+<layer name="annn" url="image/sft.jpg" align="center"	   
+onloaded="picture_resize(get(name));"  />
+<action name="picture_resize">
+
+<!-- 使用屏幕宽度或高度的百分之九十 -->
+
+div(aspect, layer[%1].imagewidth, layer[%1].imageheight);
+
+mul(new_width, stagewidth, 0.90);
+
+div(new_height, new_width, aspect);
+
+mul(max_height, stageheight, 0.90);
+
+if(new_height GT max_height,
+
+copy(new_height, max_height);
+
+mul(new_width, new_height, aspect);
+
+);
+
+roundval(new_width);
+
+roundval(new_height);
+
+copy(layer[%1].width, new_width);
+
+copy(layer[%1].height, new_height);
+
+</action>
+<events name="picture_period"  
+onpreviewcomplete="set(layer[annn].visible,false); tween(layer[annn].alpha,1);delayedcall(10,tween(layer[annn].alpha,0);delayedcall(0.5,set(layer[annn].visible,false););));"/> 
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="160.381" atv="15.049" linkedscene="scene_______" url="an/qj.png"  onloaded="do_crop_animation(128,128, 60);"/>
+
+	</scene>
+
+	<scene name="scene_______" title="外景" onstart="" havevrimage="true" thumburl="panos/______.tiles/thumb.jpg" lat="0.00000000" lng="0.00000000" heading="0.0">
+
+		<view hlookat="56.308" vlookat="5.102" fovtype="MFOV" fov="92.881" maxpixelzoom="2.0" fovmin="70" fovmax="140" limitview="auto" />
+
+		<preview url="panos/______.tiles/preview.jpg" />
+
+		<image type="CUBE" prealign="0|0.0|0" multires="true" tilesize="512" if="!webvr.isenabled">
+			<level tiledimagewidth="4608" tiledimageheight="4608">
+				<cube url="panos/______.tiles/%s/l3/%v/l3_%s_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="2304" tiledimageheight="2304">
+				<cube url="panos/______.tiles/%s/l2/%v/l2_%s_%v_%h.jpg" />
+			</level>
+			<level tiledimagewidth="1152" tiledimageheight="1152">
+				<cube url="panos/______.tiles/%s/l1/%v/l1_%s_%v_%h.jpg" />
+			</level>
+		</image>
+
+		<image prealign="0|0.0|0" if="webvr.isenabled">
+			<cube url="panos/______.tiles/vr/pano_%s.jpg" />
+		</image>
+		<hotspot name="spot1" style="skin_hotspotstyle" ath="52.650" atv="18.796" linkedscene="scene__________" url="an/qj.png"  onloaded="do_crop_animation(128,128, 60);"/>
+
+	</scene>
+
+
+</krpano>

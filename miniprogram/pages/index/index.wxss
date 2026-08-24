@@ -1,0 +1,1252 @@
+/**pages/index/index.wxss**/
+page {
+  background-color: #1a1614;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.dh-tour-container {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding-top: 30rpx;
+  overflow: hidden;
+}
+
+/* 全屏莫高窟九层楼与石窟大佛实景底图 */
+.bg-cover-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  filter: brightness(0.92) contrast(1.05);
+}
+
+/* 顶部柔和渐变天际遮罩，保证文字清晰 */
+.bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    180deg, 
+    rgba(70, 130, 190, 0.65) 0%, 
+    rgba(130, 180, 230, 0.45) 30%, 
+    rgba(0, 0, 0, 0.15) 60%, 
+    rgba(0, 0, 0, 0.55) 100%
+  );
+  z-index: 1;
+}
+
+.dh-header {
+  text-align: center;
+  position: relative;
+  z-index: 3;
+}
+
+.logo-box {
+  background: rgba(255, 255, 255, 0.82);
+  border: 2rpx solid #d4af37;
+  padding: 6rpx 28rpx;
+  border-radius: 99rpx;
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 6rpx 18rpx rgba(0, 0, 0, 0.25);
+}
+
+.logo-txt {
+  font-size: 22rpx;
+  font-weight: bold;
+  color: #8B261E;
+  letter-spacing: 4rpx;
+}
+
+.logo-sub {
+  font-size: 15rpx;
+  color: #5c432d;
+  letter-spacing: 2rpx;
+}
+
+.title-area {
+  text-align: center;
+  margin: 10rpx 0 4rpx;
+  position: relative;
+  z-index: 3;
+}
+
+.calligraphy-title {
+  font-size: 72rpx;
+  font-weight: 900;
+  color: #FFFFFF;
+  letter-spacing: 20rpx;
+  margin-left: 20rpx;
+  text-shadow: 
+    0 4rpx 18rpx rgba(0, 0, 0, 0.75), 
+    0 0 35rpx rgba(255, 255, 255, 0.8),
+    0 0 15rpx #e5b358;
+}
+
+.sub-slogan {
+  font-size: 22rpx;
+  color: #FFF2D6;
+  letter-spacing: 6rpx;
+  margin-top: 2rpx;
+  font-weight: 600;
+  text-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.8);
+}
+
+/* 顶部特色横幅区（双核心） */
+.top-banners-column {
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  margin: 10rpx 0;
+  position: relative;
+  z-index: 4;
+}
+
+/* 核心横幅 1：云游壁画修复师 */
+.restorer-banner {
+  background: linear-gradient(135deg, rgba(26, 83, 92, 0.92) 0%, rgba(45, 120, 130, 0.92) 100%);
+  border: 2rpx solid #79C2D0;
+  border-radius: 18rpx;
+  padding: 14rpx 22rpx;
+  box-shadow: 0 8rpx 24rpx rgba(26, 83, 92, 0.45);
+  backdrop-filter: blur(6px);
+}
+
+/* 核心横幅 2：须摩提女共创工坊 */
+.story-co-create-banner {
+  background: linear-gradient(135deg, rgba(139, 38, 30, 0.92) 0%, rgba(184, 74, 57, 0.92) 100%);
+  border: 2rpx solid #D4AF37;
+  border-radius: 18rpx;
+  padding: 14rpx 22rpx;
+  box-shadow: 0 8rpx 24rpx rgba(139, 38, 30, 0.45);
+  backdrop-filter: blur(6px);
+}
+
+.banner-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+  margin-bottom: 4rpx;
+}
+
+.banner-badge {
+  display: inline-block;
+  background: #D4AF37;
+  color: #3b2014;
+  font-size: 18rpx;
+  font-weight: bold;
+  padding: 2rpx 12rpx;
+  border-radius: 99rpx;
+}
+
+.banner-badge.badge-repair {
+  background: #79C2D0;
+  color: #0d282c;
+}
+
+.banner-tag {
+  font-size: 18rpx;
+  color: #F8E6C8;
+  opacity: 0.9;
+}
+
+.banner-title {
+  font-size: 25rpx;
+  font-weight: bold;
+  color: #FFFFFF;
+  letter-spacing: 1.5rpx;
+}
+
+.banner-desc {
+  font-size: 19rpx;
+  color: #E8F4F6;
+  margin-top: 2rpx;
+}
+
+/* 6 大入口矩阵 */
+.islands-container {
+  width: 92%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24rpx 14rpx;
+  margin: 10rpx 0 20rpx;
+  position: relative;
+  z-index: 5;
+}
+
+.island-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.island-tag {
+  background: rgba(255, 255, 255, 0.95);
+  border: 2.5rpx solid #d4af37;
+  border-radius: 12rpx 12rpx 2rpx 2rpx;
+  padding: 6rpx 12rpx;
+  margin-bottom: -14rpx;
+  z-index: 4;
+  box-shadow: 0 6rpx 14rpx rgba(0, 0, 0, 0.25);
+}
+
+.tag-txt {
+  writing-mode: vertical-rl;
+  font-size: 23rpx;
+  font-weight: bold;
+  color: #3b2a1a;
+  letter-spacing: 4rpx;
+}
+
+.island-circle {
+  width: 110rpx;
+  height: 110rpx;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #f7f0e4 70%, #dfcfb4 100%);
+  border: 4rpx solid #f8e5b9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10rpx 24rpx rgba(0, 0, 0, 0.35);
+  z-index: 2;
+}
+
+.icon-emoji {
+  font-size: 46rpx;
+  filter: drop-shadow(0 2rpx 4rpx rgba(0,0,0,0.2));
+}
+
+.cloud-pedestal {
+  position: absolute;
+  bottom: -18rpx;
+  width: 130rpx;
+  height: 36rpx;
+  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.75) 60%, rgba(255, 255, 255) 80%);
+  border-radius: 50%;
+  z-index: 1;
+}
+
+.bottom-scenery {
+  position: relative;
+  width: 100%;
+  height: 80rpx;
+  z-index: 2;
+}
+
+.bottom-clouds-layer {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.6) 100%);
+}
+
+/* ==========================================================================
+   【云游壁画修复师】人机协同修复推演抽屉弹窗样式
+   ========================================================================== */
+
+.dh-modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(10, 15, 25, 0.78);
+  backdrop-filter: blur(10px);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.restorer-sheet {
+  background: #FAF7F0;
+  border-top-left-radius: 36rpx;
+  border-top-right-radius: 36rpx;
+  border-top: 3rpx solid #1A535C;
+  padding: 22rpx 28rpx 40rpx;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -16rpx 40rpx rgba(0, 0, 0, 0.45);
+  animation: slideUp 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.restorer-scroll-area {
+  max-height: 68vh;
+}
+
+.step-header-tag {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin: 18rpx 0 12rpx;
+}
+
+.step-num {
+  background: #1A535C;
+  color: #FFFFFF;
+  font-size: 20rpx;
+  font-weight: bold;
+  padding: 2rpx 14rpx;
+  border-radius: 99rpx;
+}
+
+.step-title {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #2C241E;
+}
+
+/* 病害诊断视窗与高亮标记 */
+.mural-inspect-viewport {
+  position: relative;
+  width: 100%;
+  height: 320rpx;
+  background: #0d0b0a;
+  border-radius: 16rpx;
+  overflow: hidden;
+  border: 2rpx solid #D4AF37;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.inspect-main-img {
+  width: 100%;
+  height: 100%;
+}
+
+.defect-highlight-box {
+  position: absolute;
+  border: 2.5rpx dashed #E63946;
+  background: rgba(230, 57, 70, 0.25);
+  border-radius: 8rpx;
+  box-shadow: 0 0 16rpx rgba(230, 57, 70, 0.6);
+  pointer-events: none;
+  animation: boxBlink 2s infinite alternate;
+}
+
+@keyframes boxBlink {
+  0% { opacity: 0.7; }
+  100% { opacity: 1; border-color: #FFD166; }
+}
+
+.defect-box-tag {
+  position: absolute;
+  top: -24rpx;
+  left: 0;
+  background: #E63946;
+  color: #FFFFFF;
+  font-size: 16rpx;
+  padding: 2rpx 8rpx;
+  border-radius: 4rpx;
+  white-space: nowrap;
+}
+
+/* 病害选择器 */
+.defect-selector-row {
+  display: flex;
+  gap: 12rpx;
+  margin: 14rpx 0 10rpx;
+}
+
+.defect-pill {
+  flex: 1;
+  background: #FFFFFF;
+  border: 1.5rpx solid #D9C8B0;
+  border-radius: 12rpx;
+  padding: 12rpx 8rpx;
+  font-size: 21rpx;
+  color: #5C432D;
+  text-align: center;
+  font-weight: bold;
+}
+
+.defect-pill.active {
+  background: #1A535C;
+  color: #FFFFFF;
+  border-color: #1A535C;
+}
+
+/* 诊断报告卡片 */
+.defect-report-card {
+  background: #FFFFFF;
+  border: 1.5rpx solid #EADBCE;
+  border-radius: 14rpx;
+  padding: 16rpx 18rpx;
+  margin-bottom: 16rpx;
+}
+
+.report-title {
+  font-size: 23rpx;
+  font-weight: bold;
+  color: #1A535C;
+  margin-bottom: 8rpx;
+}
+
+.report-row {
+  font-size: 21rpx;
+  color: #5C432D;
+  line-height: 1.5;
+  margin-bottom: 6rpx;
+}
+
+.r-lbl {
+  font-weight: bold;
+  color: #8B261E;
+}
+
+.branch-sub-hint {
+  font-size: 21rpx;
+  color: #7A695B;
+  margin-bottom: 10rpx;
+}
+
+/* 修复分支卡片 */
+.branches-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+  margin-bottom: 16rpx;
+}
+
+.branch-choice-card {
+  background: #FFFFFF;
+  border: 2rpx solid #EADBCE;
+  border-radius: 14rpx;
+  padding: 16rpx;
+  transition: all 0.2s ease;
+}
+
+.branch-choice-card.active {
+  border-color: #1A535C;
+  background: #F4F9F9;
+  box-shadow: 0 4rpx 14rpx rgba(26, 83, 92, 0.15);
+}
+
+.branch-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.branch-radio {
+  width: 22rpx;
+  height: 22rpx;
+  border-radius: 50%;
+  border: 2rpx solid #C2AA8C;
+  margin-right: 10rpx;
+}
+
+.branch-radio.checked {
+  border-color: #1A535C;
+  background: #1A535C;
+}
+
+.branch-tag-name {
+  flex: 1;
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #2C241E;
+}
+
+.branch-stance-badge {
+  font-size: 19rpx;
+  padding: 2rpx 10rpx;
+  border-radius: 6rpx;
+  font-weight: bold;
+}
+
+.stance-safe { background: #E8F5E9; color: #2E7D32; }
+.stance-risk { background: #FFEBEE; color: #C62828; }
+.stance-tech { background: #E3F2FD; color: #1565C0; }
+
+.branch-desc {
+  font-size: 21rpx;
+  color: #5C432D;
+  line-height: 1.5;
+  margin-bottom: 8rpx;
+}
+
+.branch-pros-cons {
+  font-size: 19rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.pro-item { color: #2E7D32; }
+.con-item { color: #C62828; }
+.pro-dot, .con-dot { margin-right: 6rpx; font-weight: bold; }
+
+/* 人文考据专家库面板 */
+.evidence-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10rpx;
+  margin-bottom: 16rpx;
+}
+
+.evidence-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12rpx;
+  background: #FFFFFF;
+  border: 1.5rpx solid #EADBCE;
+  border-radius: 12rpx;
+  padding: 12rpx 14rpx;
+}
+
+.e-icon {
+  font-size: 30rpx;
+}
+
+.e-content {
+  flex: 1;
+}
+
+.e-title {
+  font-size: 22rpx;
+  font-weight: bold;
+  color: #8B261E;
+  margin-bottom: 4rpx;
+}
+
+.e-text {
+  font-size: 20rpx;
+  color: #5C432D;
+  line-height: 1.5;
+}
+
+/* 校验标签打标 */
+.validation-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-bottom: 16rpx;
+}
+
+.val-tag {
+  background: #FFFFFF;
+  border: 1.5rpx solid #D9C8B0;
+  border-radius: 99rpx;
+  padding: 8rpx 18rpx;
+  font-size: 20rpx;
+  color: #5C432D;
+}
+
+.val-tag.active {
+  background: #1A535C;
+  color: #FFFFFF;
+  border-color: #1A535C;
+  font-weight: bold;
+}
+
+.restorer-footer {
+  margin-top: 10rpx;
+}
+
+.submit-repair-btn {
+  background: linear-gradient(135deg, #1A535C 0%, #2D7882 100%);
+  color: #FFFFFF;
+  font-size: 27rpx;
+  font-weight: bold;
+  border-radius: 99rpx;
+  border: none;
+  box-shadow: 0 8rpx 20rpx rgba(26, 83, 92, 0.35);
+}
+
+/* ==========================================================================
+   看壁画：洞窟选择半屏抽屉 & 横屏壁画浏览器
+   ========================================================================== */
+
+.cave-selector-sheet {
+  background: #FAF7F0;
+  border-top-left-radius: 36rpx;
+  border-top-right-radius: 36rpx;
+  border-top: 3rpx solid #D4AF37;
+  padding: 24rpx 32rpx 50rpx;
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -12rpx 36rpx rgba(0, 0, 0, 0.35);
+  animation: slideUp 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.sheet-handle-bar {
+  width: 70rpx;
+  height: 8rpx;
+  background: #D9C8B0;
+  border-radius: 99rpx;
+  align-self: center;
+  margin-bottom: 20rpx;
+}
+
+.sheet-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20rpx;
+  border-bottom: 2rpx solid #EADBCE;
+  margin-bottom: 24rpx;
+}
+
+.sheet-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #8B261E;
+  display: block;
+}
+
+.sheet-subtitle {
+  font-size: 22rpx;
+  color: #7A695B;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.sheet-close-btn {
+  width: 56rpx;
+  height: 56rpx;
+  background: #EFE8DA;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26rpx;
+  color: #5C432D;
+  font-weight: bold;
+}
+
+/* 洞窟选项卡片列表 */
+.cave-list-scroll {
+  max-height: 60vh;
+}
+
+.cave-choice-card {
+  background: #FFFFFF;
+  border: 2rpx solid #EADBCE;
+  border-radius: 20rpx;
+  padding: 24rpx 20rpx;
+  margin-bottom: 20rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4rpx 14rpx rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.cave-choice-card:active {
+  background: #FDFBF7;
+  border-color: #8B261E;
+  transform: scale(0.98);
+}
+
+.card-left-badge {
+  background: linear-gradient(135deg, #8B261E 0%, #B84A39 100%);
+  color: #FFFFFF;
+  border-radius: 14rpx;
+  padding: 16rpx 12rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 110rpx;
+  margin-right: 20rpx;
+}
+
+.badge-num {
+  font-size: 26rpx;
+  font-weight: bold;
+}
+
+.badge-era {
+  font-size: 20rpx;
+  opacity: 0.9;
+  margin-top: 4rpx;
+}
+
+.card-main-info {
+  flex: 1;
+}
+
+.card-cave-title {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #2C241E;
+  margin-bottom: 6rpx;
+}
+
+.card-highlight {
+  font-size: 22rpx;
+  color: #B8860B;
+  margin-bottom: 12rpx;
+  line-height: 1.4;
+}
+
+.wall-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8rpx;
+}
+
+.wall-tag {
+  background: #F8F3EA;
+  color: #5C432D;
+  font-size: 20rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  border: 1rpx solid #EADBCE;
+}
+
+.card-arrow-icon {
+  font-size: 32rpx;
+  color: #C2AA8C;
+  margin-left: 12rpx;
+}
+
+/* ==========================================================================
+   横屏壁画全景品鉴器 (Landscape Mural Modal)
+   ========================================================================== */
+
+.landscape-mural-modal {
+  background: #1E1A17;
+  border-top-left-radius: 36rpx;
+  border-top-right-radius: 36rpx;
+  border-top: 3rpx solid #D4AF37;
+  padding: 24rpx 28rpx 50rpx;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -16rpx 40rpx rgba(0, 0, 0, 0.6);
+  animation: slideUp 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  color: #FFFFFF;
+}
+
+.landscape-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 18rpx;
+  border-bottom: 1.5rpx solid rgba(212, 175, 55, 0.3);
+  margin-bottom: 20rpx;
+}
+
+.cave-nav-back {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  background: rgba(255, 255, 255, 0.12);
+  padding: 8rpx 18rpx;
+  border-radius: 99rpx;
+  font-size: 22rpx;
+  color: #E5B358;
+}
+
+.back-arrow {
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.landscape-title-area {
+  text-align: center;
+  flex: 1;
+  padding: 0 10rpx;
+}
+
+.viewer-cave-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #FFFFFF;
+  display: block;
+}
+
+.viewer-cave-era {
+  font-size: 20rpx;
+  color: #C2AA8C;
+  margin-top: 2rpx;
+  display: block;
+}
+
+.landscape-gallery-box {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+.landscape-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 400rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+  border: 2.5rpx solid #D4AF37;
+  box-shadow: 0 10rpx 30rpx rgba(0, 0, 0, 0.5);
+  background: #0d0b0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.landscape-main-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* 小程序发光标点样式：小巧、半透明、无文字遮挡 */
+.mp-hotspot-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36rpx;
+  height: 36rpx;
+  z-index: 10;
+}
+
+.mp-hotspot-ring {
+  position: absolute;
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: 50%;
+  background: rgba(255, 215, 0, 0.4);
+  animation: mpRipple 2s infinite;
+}
+
+@keyframes mpRipple {
+  0% { transform: scale(0.5); opacity: 0.85; }
+  100% { transform: scale(2.0); opacity: 0; }
+}
+
+.mp-hotspot-dot {
+  width: 18rpx;
+  height: 18rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  border: 2rpx solid rgba(255, 245, 220, 0.95);
+  box-shadow: 0 0 10rpx rgba(255, 215, 0, 0.9);
+  z-index: 2;
+}
+
+.mp-hotspot-pin.active-pin .mp-hotspot-dot {
+  background: rgba(226, 125, 96, 0.85);
+  border-color: #ffffff;
+  transform: scale(1.3);
+}
+
+/* 小程序热点解析卡片 */
+.mp-hotspot-card {
+  background: rgba(255, 255, 255, 0.12);
+  border: 2rpx solid #D4AF37;
+  border-radius: 16rpx;
+  padding: 18rpx 22rpx;
+  backdrop-filter: blur(8px);
+  animation: fadeIn 0.2s ease;
+}
+
+.mp-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.mp-card-badge {
+  background: #8B261E;
+  color: #ffffff;
+  font-size: 18rpx;
+  font-weight: bold;
+  padding: 2rpx 10rpx;
+  border-radius: 4rpx;
+  margin-right: 10rpx;
+}
+
+.mp-card-title {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #E5B358;
+}
+
+.mp-card-close {
+  font-size: 28rpx;
+  color: #C2AA8C;
+  padding: 4rpx 10rpx;
+}
+
+.mp-card-subtitle {
+  font-size: 20rpx;
+  color: #79C2D0;
+  margin-bottom: 6rpx;
+}
+
+.mp-card-desc {
+  font-size: 22rpx;
+  color: #F8E6C8;
+  line-height: 1.5;
+}
+
+.image-zoom-hint {
+  position: absolute;
+  top: 16rpx;
+  right: 16rpx;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1rpx solid rgba(255, 255, 255, 0.4);
+  padding: 6rpx 16rpx;
+  border-radius: 99rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  backdrop-filter: blur(4px);
+  z-index: 12;
+}
+
+.zoom-icon {
+  font-size: 20rpx;
+}
+
+.zoom-text {
+  font-size: 20rpx;
+  color: #FFFFFF;
+}
+
+.image-orient-tag {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.85) 100%);
+  color: #E5B358;
+  font-size: 24rpx;
+  font-weight: bold;
+  padding: 20rpx 20rpx 12rpx;
+  z-index: 5;
+}
+
+.wall-tabs-scroll {
+  white-space: nowrap;
+  display: flex;
+  gap: 16rpx;
+  padding: 6rpx 0;
+}
+
+.wall-tab-pill {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5rpx solid rgba(212, 175, 55, 0.3);
+  padding: 10rpx 24rpx;
+  border-radius: 14rpx;
+  margin-right: 16rpx;
+  transition: all 0.2s ease;
+}
+
+.wall-tab-pill.active {
+  background: linear-gradient(135deg, #8B261E 0%, #B84A39 100%);
+  border-color: #E5B358;
+  box-shadow: 0 4rpx 16rpx rgba(139, 38, 30, 0.5);
+}
+
+.pill-orient {
+  font-size: 20rpx;
+  color: #E5B358;
+  font-weight: bold;
+}
+
+.wall-tab-pill.active .pill-orient {
+  color: #FFFFFF;
+}
+
+.pill-title {
+  font-size: 22rpx;
+  color: #CCCCCC;
+  margin-top: 4rpx;
+}
+
+.wall-tab-pill.active .pill-title {
+  color: #FFFFFF;
+  font-weight: bold;
+}
+
+.wall-info-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5rpx solid rgba(212, 175, 55, 0.25);
+  border-radius: 16rpx;
+  padding: 20rpx;
+}
+
+.info-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.info-badge {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #E5B358;
+}
+
+.art-tags-row {
+  display: flex;
+  gap: 10rpx;
+}
+
+.art-pill {
+  font-size: 20rpx;
+  color: #79C2D0;
+  background: rgba(121, 194, 208, 0.15);
+  padding: 2rpx 10rpx;
+  border-radius: 6rpx;
+}
+
+.info-card-desc {
+  font-size: 23rpx;
+  color: #E0D4C5;
+  line-height: 1.6;
+}
+
+/* 全屏内嵌灯箱 */
+.fullscreen-lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #000000;
+  z-index: 1999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40rpx 20rpx;
+  box-sizing: border-box;
+}
+
+.lightbox-close-btn {
+  position: absolute;
+  top: 60rpx;
+  right: 40rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1rpx solid rgba(255, 255, 255, 0.5);
+  color: #FFFFFF;
+  font-size: 24rpx;
+  padding: 10rpx 24rpx;
+  border-radius: 99rpx;
+  z-index: 2000;
+}
+
+.lightbox-full-img {
+  width: 100%;
+  max-height: 75vh;
+  border-radius: 12rpx;
+  box-shadow: 0 0 40rpx rgba(212, 175, 55, 0.3);
+}
+
+.lightbox-caption {
+  margin-top: 30rpx;
+  color: #E5B358;
+  font-size: 26rpx;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 2rpx;
+}
+
+/* ==========================================================================
+   须摩提女因缘：人机叙事共创工坊 (1234.docx 样式)
+   ========================================================================== */
+
+.cocreate-sheet {
+  background: #FAF7F0;
+  border-top-left-radius: 36rpx;
+  border-top-right-radius: 36rpx;
+  border-top: 3rpx solid #8B261E;
+  padding: 24rpx 30rpx 40rpx;
+  max-height: 86vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -16rpx 40rpx rgba(0, 0, 0, 0.4);
+  animation: slideUp 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.cocreate-scroll-area {
+  max-height: 64vh;
+}
+
+.section-label {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #8B261E;
+  margin: 16rpx 0 10rpx;
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.scene-switch-row {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.scene-btn {
+  flex: 1;
+  background: #FFFFFF;
+  border: 2rpx solid #D9C8B0;
+  padding: 16rpx 12rpx;
+  border-radius: 14rpx;
+  text-align: center;
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #5C432D;
+  transition: all 0.2s ease;
+}
+
+.scene-btn.active {
+  background: #8B261E;
+  color: #FFFFFF;
+  border-color: #8B261E;
+  box-shadow: 0 4rpx 12rpx rgba(139, 38, 30, 0.3);
+}
+
+.scene-content-card {
+  background: #FFFFFF;
+  border: 1.5rpx solid #EADBCE;
+  border-radius: 16rpx;
+  padding: 18rpx;
+  margin-bottom: 16rpx;
+}
+
+.card-sec-title {
+  font-size: 24rpx;
+  font-weight: bold;
+  color: #8B261E;
+  margin-bottom: 8rpx;
+}
+
+.card-sec-title.ai-title {
+  color: #1A535C;
+}
+
+.ai-draft-card {
+  background: #F4F8F8;
+  border-color: #A9D5DD;
+}
+
+.card-sec-body {
+  font-size: 22rpx;
+  color: #4A3E36;
+  line-height: 1.6;
+}
+
+.perspective-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14rpx;
+  margin-bottom: 16rpx;
+}
+
+.perspective-card {
+  background: #FFFFFF;
+  border: 2rpx solid #EADBCE;
+  border-radius: 16rpx;
+  padding: 18rpx;
+  transition: all 0.2s ease;
+}
+
+.perspective-card.active {
+  border-color: #8B261E;
+  background: #FFF9F8;
+  box-shadow: 0 4rpx 14rpx rgba(139, 38, 30, 0.15);
+}
+
+.p-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8rpx;
+}
+
+.p-name {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #8B261E;
+}
+
+.p-focus {
+  font-size: 20rpx;
+  color: #B8860B;
+  background: #FDF5E6;
+  padding: 2rpx 10rpx;
+  border-radius: 6rpx;
+}
+
+.p-desc {
+  font-size: 22rpx;
+  color: #5C432D;
+  line-height: 1.5;
+  margin-bottom: 8rpx;
+}
+
+.p-output {
+  font-size: 20rpx;
+  color: #1A535C;
+  font-weight: bold;
+}
+
+.voice-style-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.voice-chip {
+  background: #FFFFFF;
+  border: 1.5rpx solid #D9C8B0;
+  padding: 10rpx 18rpx;
+  border-radius: 99rpx;
+  font-size: 22rpx;
+  color: #5C432D;
+}
+
+.voice-chip.active {
+  background: #1A535C;
+  color: #FFFFFF;
+  border-color: #1A535C;
+  font-weight: bold;
+}
+
+.cocreate-footer {
+  margin-top: 14rpx;
+}
+
+.generate-video-btn {
+  background: linear-gradient(135deg, #8B261E 0%, #C44F3B 100%);
+  color: #FFFFFF;
+  font-size: 28rpx;
+  font-weight: bold;
+  border-radius: 99rpx;
+  border: none;
+  box-shadow: 0 8rpx 20rpx rgba(139, 38, 30, 0.35);
+}
